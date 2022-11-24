@@ -9,14 +9,13 @@ import {
 import {CarCard} from '../components/CarCard';
 import {TCar} from '../redux/depotReducer/types';
 import {getCars, getDrivers} from '../redux/depotReducer/thunks';
+import {requestCars} from '../redux/depotReducer/action';
 
 export const Cars: React.FC<TCar[]> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // @ts-ignore
-    dispatch(getCars());
-    console.log();
+    dispatch(requestCars());
   }, []);
 
   const cars = useSelector(carsSelector);

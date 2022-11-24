@@ -8,6 +8,7 @@ export type TDriver = {
   last_name: string;
   id: number;
   date_birth: number;
+  date_created: number;
   status: {
     title: string;
     code: string;

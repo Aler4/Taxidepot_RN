@@ -1,31 +1,44 @@
 import React, {useEffect} from 'react';
-import {View, SafeAreaView, FlatList} from 'react-native';
+import { View, SafeAreaView, FlatList, StyleSheet } from "react-native";
 import {useDispatch, useSelector} from 'react-redux';
 import {driversSelector, loadSelector} from '../redux/depotReducer/selector';
 import {TDriver} from '../redux/depotReducer/types';
 import {DriverCard} from '../components/DriverCard';
 import {getDrivers} from '../redux/depotReducer/thunks';
+import { requestDrivers } from "../redux/depotReducer/action";
 
 export const Drivers: React.FC<TDriver[]> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // @ts-ignore
-    dispatch(getDrivers());
-    console.log();
+    dispatch(requestDrivers());
   }, []);
 
   const drivers = useSelector(driversSelector);
 
   return (
-    <SafeAreaView>
-      <View>
+    <SafeAreaView style={styles.container}>
         <FlatList
+          contentContainerStyle={styles.list}
           keyExtractor={item => item.id.toString()}
           data={drivers}
           renderItem={({item}) => <DriverCard driver={item} />}
         />
-      </View>
     </SafeAreaView>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  list: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+  },
+});
