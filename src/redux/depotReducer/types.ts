@@ -16,6 +16,7 @@ export type TDriver = {
 };
 
 export type TCar = {
+  id: number,
   model: string;
   mark: string;
   year: number;
