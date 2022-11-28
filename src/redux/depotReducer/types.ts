@@ -1,7 +1,8 @@
 export type TAction = {
   type: string;
-  data: TDriver[] | TCar[] | boolean;
+  data: TDriver[] | TCar[] | boolean | TStatus;
 };
+export type TReducer = (state: IState, action: TAction) => IState;
 
 export type TDriver = {
   first_name: string;
@@ -16,7 +17,7 @@ export type TDriver = {
 };
 
 export type TCar = {
-  id: number,
+  id: number;
   model: string;
   mark: string;
   year: number;
@@ -27,9 +28,15 @@ export type TCar = {
     code: string;
   };
 };
+export type TStatus = {
+  title: string;
+  code: string;
+};
 
 export interface IState {
   isLoad: boolean;
   cars: TCar[] | [];
   drivers: TDriver[] | [];
+  driver_statuses: TStatus[] | [];
+  car_statuses: TStatus[] | [];
 };

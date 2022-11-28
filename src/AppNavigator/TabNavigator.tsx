@@ -9,7 +9,7 @@ const Tabs = createMaterialBottomTabNavigator();
 export const AppTabs: React.FC = () => {
   return (
     <Tabs.Navigator
-      initialRouteName="Cars"
+      initialRouteName="Drivers"
       activeColor="#f0edf6"
       inactiveColor="#000"
       // labeled={false}

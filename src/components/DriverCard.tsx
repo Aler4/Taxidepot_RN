@@ -1,17 +1,20 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {TDriver} from '../redux/depotReducer/types';
+import { TDriver, TStatus } from "../redux/depotReducer/types";
 import DropShadow from 'react-native-drop-shadow';
 import {CardRow} from './CardRow';
-import { formatDate } from "../helpers/formatDate";
-import { DeleteBtn } from "./DeleteBtn";
-import { LinkBtn } from "./LinkBtn";
+import {formatDate} from '../helpers/formatDate';
+import {DeleteBtn} from './DeleteBtn';
+import {LinkBtn} from './LinkBtn';
+import { StatusDropDown, TLabel } from "./StatusDropDown";
+
 
 interface IDriverProps {
   driver: TDriver;
+  status_list: TLabel[];
 }
 
-export const DriverCard: React.FC<IDriverProps> = ({driver}) => {
+export const DriverCard: React.FC<IDriverProps> = ({driver, status_list}) => {
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
@@ -19,10 +22,22 @@ export const DriverCard: React.FC<IDriverProps> = ({driver}) => {
         <CardRow
           title={'ФІО: '}
           info={`${driver.first_name} ${driver.last_name}`}
+          editable={true}
         />
-        <CardRow title={'Дата реєстрації: '} info={`${formatDate(driver.date_created)}`} />
-        <CardRow title={'Дата народження: '} info={`${formatDate(driver.date_birth)}`} />
-        <CardRow title={'Статус: '} info={driver.status.title} />
+        <CardRow
+          title={'Дата реєстрації: '}
+          info={`${formatDate(driver.date_created)}`}
+        />
+        <CardRow
+          title={'Дата народження: '}
+          info={`${formatDate(driver.date_birth)}`}
+          editable={true}
+        />
+        <StatusDropDown
+          init_value={driver.status.title}
+          labels={status_list}
+          title={'Статус'}
+        />
 
         <View style={styles.actionContainer}>
           <DeleteBtn />

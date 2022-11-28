@@ -1,13 +1,24 @@
-import {TAction, IState, TDriver, TCar} from './types';
-import {UPDATE_LOADER, UPLOAD_CARS, UPLOAD_DRIVERS} from './action';
+import { TAction, IState, TDriver, TCar, TStatus, TReducer } from "./types";
+import {
+  UPDATE_LOADER,
+  UPLOAD_CAR_STATUSES,
+  UPLOAD_CARS,
+  UPLOAD_DRIVER_STATUSES,
+  UPLOAD_DRIVERS,
+} from './action';
 
 const initialState: IState = {
   isLoad: false,
   cars: [],
   drivers: [],
+  driver_statuses: [],
+  car_statuses: [],
 };
 
-export const depotReducer = (state = initialState, action: TAction): IState => {
+export const depotReducer: TReducer = (
+  state = initialState,
+  action,
+): IState => {
   switch (action.type) {
     case UPDATE_LOADER:
       return {
@@ -24,6 +35,16 @@ export const depotReducer = (state = initialState, action: TAction): IState => {
       return {
         ...state,
         drivers: action.data as TDriver[],
+      };
+    case UPLOAD_CAR_STATUSES:
+      return {
+        ...state,
+        car_statuses: action.data as unknown as TStatus[],
+      };
+    case UPLOAD_DRIVER_STATUSES:
+      return {
+        ...state,
+        car_statuses: action.data as unknown as TStatus[],
       };
     default:
       return state;
