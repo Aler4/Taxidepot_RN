@@ -13,7 +13,6 @@ interface CarProps {
 }
 
 export const CarCard: React.FC<CarProps> = ({car, status_list}) => {
-  console.log(status_list);
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>

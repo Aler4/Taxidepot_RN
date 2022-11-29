@@ -1,10 +1,15 @@
 import React, {useEffect} from 'react';
-import {View, SafeAreaView, FlatList, StyleSheet} from 'react-native';
+import { SafeAreaView, FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import {useDispatch, useSelector} from 'react-redux';
-import { driversSelector, driverStatusSelector, loadSelector } from "../redux/depotReducer/selector";
+import {
+  driversSelector,
+  driverStatusSelector,
+  loadSelector,
+} from '../redux/depotReducer/selector';
 import {TDriver} from '../redux/depotReducer/types';
 import {DriverCard} from '../components/DriverCard';
 import {requestDrivers} from '../redux/depotReducer/action';
+import { AddDriverModal } from '../components/ModalAdd/AddDriverModal';
 
 export const Drivers: React.FC<TDriver[]> = () => {
   const dispatch = useDispatch();
@@ -13,14 +18,16 @@ export const Drivers: React.FC<TDriver[]> = () => {
     dispatch(requestDrivers());
   }, [dispatch]);
 
+  const isLoad = useSelector(loadSelector);
   const drivers = useSelector(driversSelector);
-  let statuses = useSelector(driverStatusSelector);
+  const statuses = useSelector(driverStatusSelector);
   let listItems = statuses.map(el => ({
     label: el.title,
     value: el.title,
   }));
-
-  return (
+  return isLoad ? (
+    <Text>Load...</Text>
+  ) : (
     <SafeAreaView style={styles.container}>
       <FlatList
         contentContainerStyle={styles.list}
@@ -30,6 +37,10 @@ export const Drivers: React.FC<TDriver[]> = () => {
           <DriverCard driver={item} status_list={listItems} />
         )}
       />
+      <TouchableOpacity>
+        <Text>+</Text>
+      </TouchableOpacity>
+      <AddDriverModal statuses={listItems} />
     </SafeAreaView>
   );
 };

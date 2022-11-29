@@ -12,8 +12,8 @@ import {getApi} from '../../services/getApi';
 import {put, call, takeLatest} from '@redux-saga/core/effects';
 
 export function* watchRequests() {
-  yield takeLatest(REQUEST_DRIVERS, getDrivers);
   yield takeLatest(REQUEST_CARS, getCars);
+  yield takeLatest(REQUEST_DRIVERS, getDrivers);
 }
 
 function* getDrivers() {
@@ -29,8 +29,8 @@ function* getDrivers() {
         .then(res => res.json())
         .then(res => res.data),
     );
-    yield put(uploadDrivers(drivers));
     yield put(getDriverStatuses(statuses));
+    yield put(uploadDrivers(drivers));
     yield put(updateLoad(false));
   } catch (e) {
     console.log(e);
@@ -50,8 +50,8 @@ function* getCars() {
         .then(res => res.json())
         .then(res => res.data),
     );
-    yield put(loadCars(cars));
     yield put(getCarStatuses(statuses));
+    yield put(loadCars(cars));
     yield put(updateLoad(false));
   } catch (e) {
     console.log(e);
