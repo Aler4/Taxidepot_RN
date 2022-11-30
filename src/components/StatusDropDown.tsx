@@ -1,23 +1,33 @@
 import DropDownPicker from 'react-native-dropdown-picker';
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {StyleSheet, Text, View} from 'react-native';
 
 export type TLabel = {
   label: string;
   value: string;
+  code: string;
 };
 
 type TStatusProps = {
   init_value: string;
   labels: TLabel[];
   title: string;
+  updateDate: (data: {title: string, code: string}) => void;
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(props.init_value);
   const [items, setItems] = useState(props.labels);
-  console.log(props.labels);
+
+  const sendValue = (val: string) => {
+    let item = items.filter(el => el.value === val)[0];
+    console.log(item.code);
+    if(props.updateDate){
+      props.updateDate({title: item.value, code: item.code})
+
+    }
+  };
 
   return (
     <View style={styles.row}>
@@ -33,6 +43,8 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
         style={styles.input}
         listItemContainerStyle={styles.list}
         dropDownContainerStyle={styles.listContainer}
+        onLayout={() => sendValue(value)}
+        onClose={() => sendValue(value)}
       />
     </View>
   );

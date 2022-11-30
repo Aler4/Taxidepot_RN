@@ -20,6 +20,7 @@ export const Cars: React.FC<TCar[]> = () => {
   let listItems = statuses.map(el => ({
     label: el.title,
     value: el.title,
+    code: el.code,
   }));
   return isLoad ? (<Text>Loading...</Text>) : (
     <SafeAreaView style={styles.container}>
