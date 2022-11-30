@@ -52,7 +52,9 @@ export const Drivers: React.FC<TDriver[]> = () => {
           <DriverCard driver={item} status_list={listItems} />
         )}
       />
-      <TouchableOpacity style={styles.addBtn} onPress={() => setModalState(!modalState)}>
+      <TouchableOpacity
+        style={styles.addBtn}
+        onPress={() => setModalState(!modalState)}>
         <Text style={styles.addBtnText}>Add driver</Text>
       </TouchableOpacity>
       <AddDriverModal
@@ -84,5 +86,5 @@ const styles = StyleSheet.create({
   addBtnText: {
     fontSize: 20,
     color: '#fff',
-  }
+  },
 });

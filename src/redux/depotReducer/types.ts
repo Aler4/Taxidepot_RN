@@ -7,9 +7,9 @@ export type TReducer = (state: IState, action: TAction) => IState;
 export type TDriver = {
   first_name: string;
   last_name: string;
-  id: number;
+  id?: number;
   date_birth: number;
-  date_created: number;
+  date_created?: number;
   status: {
     title: string;
     code: string;
@@ -17,7 +17,7 @@ export type TDriver = {
 };
 
 export type TCar = {
-  id: number;
+  id?: number;
   model: string;
   mark: string;
   year: number;
@@ -33,10 +33,14 @@ export type TStatus = {
   code: string;
 };
 
+export type TAddAction = {
+  body: TCar | TDriver;
+  type: string;
+};
 export interface IState {
   isLoad: boolean;
   cars: TCar[] | [];
   drivers: TDriver[] | [];
   driver_statuses: TStatus[] | [];
   car_statuses: TStatus[] | [];
-};
+}

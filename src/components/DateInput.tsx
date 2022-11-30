@@ -9,7 +9,7 @@ type TDateProps = {
 };
 
 export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<TDate>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -28,8 +28,14 @@ export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
   const getDate = () => {
     let res: string = '';
     if (date) {
-      let day: string = (date as unknown as Date).getDate() < 10 ? `0${(date as unknown as Date).getDate()}` : `${(date as unknown as Date).getDate()}`;
-      let month: string = (date as unknown as Date).getMonth() < 10 ? `0${(date as unknown as Date).getMonth()}` : `${(date as unknown as Date).getMonth()}`;
+      let day: string =
+        (date as unknown as Date).getDate() < 10
+          ? `0${(date as unknown as Date).getDate()}`
+          : `${(date as unknown as Date).getDate()}`;
+      let month: string =
+        (date as unknown as Date).getMonth() < 10
+          ? `0${(date as unknown as Date).getMonth()}`
+          : `${(date as unknown as Date).getMonth()}`;
       let year: number = (date as unknown as Date).getFullYear();
       res = `${day}.${month}.${year}`;
     }
@@ -72,5 +78,5 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 10,
-  }
+  },
 });

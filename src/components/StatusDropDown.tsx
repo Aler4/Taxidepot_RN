@@ -22,10 +22,8 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
 
   const sendValue = (val: string) => {
     let item = items.filter(el => el.value === val)[0];
-    console.log(item.code);
     if(props.updateDate){
       props.updateDate({title: item.value, code: item.code})
-
     }
   };
 

@@ -7,7 +7,7 @@ type TInputProps = {
 };
 
 export const ModalInput: React.FC<TInputProps> = props => {
-  const [value, setValue] = useState<string | number>();
+  const [value, setValue] = useState<string | number>('');
 
   return (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ export const ModalInput: React.FC<TInputProps> = props => {
         style={styles.textInput}
         maxLength={12}
         autoCapitalize={'characters'}
-        value={value}
+        value={value.toString()}
         onChangeText={setValue}
         onEndEditing={() => props.updateData(value)}
       />

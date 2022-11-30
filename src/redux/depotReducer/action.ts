@@ -1,4 +1,4 @@
-import { TCar, TDriver, TStatus } from "./types";
+import {TCar, TDriver, TStatus} from './types';
 
 export const UPLOAD_DRIVERS = 'UPLOAD_DRIVERS';
 export const UPLOAD_DRIVER_STATUSES = 'UPLOAD_DRIVER_STATUSES';
@@ -8,6 +8,7 @@ export const UPDATE_LOADER = 'UPDATE_LOADER';
 export const REQUEST_DRIVERS = 'REQUEST_DRIVERS';
 export const REQUEST_CARS = 'REQUEST_CARS';
 export const ADD_DRIVER = 'ADD_DRIVER';
+export const ADD_CAR = 'ADD_CAR';
 
 export const uploadDrivers = (data: TDriver[]) => ({
   data,
@@ -24,6 +25,7 @@ export const getDriverStatuses = (data: TStatus[]) => ({
   type: UPLOAD_DRIVER_STATUSES,
 });
 
-export const addDriver = (body: object) => ({body,type: ADD_DRIVER});
+export const addDriver = (body: TDriver) => ({body, type: ADD_DRIVER});
+export const addCar = (body: TCar) => ({body, type: ADD_CAR});
 export const requestDrivers = () => ({type: REQUEST_DRIVERS});
 export const requestCars = () => ({type: REQUEST_CARS});

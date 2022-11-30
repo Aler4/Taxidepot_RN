@@ -2,11 +2,10 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 import {ModalInput} from './ModalInput';
 import {StatusDropDown, TLabel} from '../StatusDropDown';
-import {DateInput} from '../DateInput';
 import {TDate} from '../../helpers/formatDate';
 import {useDispatch} from 'react-redux';
-import {addDriver} from '../../redux/depotReducer/action';
-import {TDriver} from '../../redux/depotReducer/types';
+import {addCar, addDriver} from '../../redux/depotReducer/action';
+import {TCar} from '../../redux/depotReducer/types';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -16,20 +15,25 @@ type TModalProps = {
 
 type TData = string | number | {value: string; code: string} | TDate;
 
-export const AddDriverModal: React.FC<TModalProps> = ({
+export const AddCarModal: React.FC<TModalProps> = ({
   statuses,
   visible,
   changeVisible,
 }) => {
-  let initDriver: TDriver = {
-    first_name: '',
-    last_name: '',
-    date_birth: 0,
-    status: {title: 'Заблокирован', code: ''},
+  let initCar: TCar = {
+    model: '',
+    mark: '',
+    year: 2007,
+    number: '',
+    driver_id: 0,
+    status: {
+      title: '',
+      code: '',
+    },
   };
 
   const dispath = useDispatch();
-  const [driver, setDriver] = useState<TDriver>(initDriver);
+  const [car, setCar] = useState<TCar>(initCar);
 
   const [isVisible, setIsVisible] = useState(visible);
 
@@ -39,35 +43,38 @@ export const AddDriverModal: React.FC<TModalProps> = ({
 
   const getValue = useCallback(
     (key: string, value: TData) => {
-      setDriver({...driver, [key]: value});
+      if ([key] == 'year' || [key] == 'driver_id') {
+        value = +(value as string);
+      }
+      setCar({...car, [key]: value});
+      console.log(typeof value)
+
     },
-    [driver, setDriver],
+    [car, setCar],
   );
 
   const addHandler = () => {
-    console.log(driver);
-    dispath(addDriver(driver));
+    dispath(addCar(car));
     changeVisible(!visible);
   };
 
   return (
     <Modal visible={isVisible} style={styles.container}>
+      <ModalInput title={'Модель'} updateData={getValue.bind(null, 'model')} />
+      <ModalInput title={'Марка'} updateData={getValue.bind(null, 'mark')} />
+      <ModalInput title={'Рік'} updateData={getValue.bind(null, 'year')} />
       <ModalInput
-        title={"Ім'я"}
-        updateData={getValue.bind(null, 'first_name')}
+        title={'Номер авто'}
+        updateData={getValue.bind(null, 'number')}
       />
       <ModalInput
-        title={'Прізвище'}
-        updateData={getValue.bind(null, 'last_name')}
-      />
-      <DateInput
-        title={'Дата народженя'}
-        dataUpdate={getValue.bind(null, 'date_birth')}
+        title={'Ід водія'}
+        updateData={getValue.bind(null, 'driver_id')}
       />
       <View style={styles.status}>
         <StatusDropDown
           title={'Статус'}
-          init_value={'Активный'}
+          init_value={'Стандарт'}
           labels={statuses}
           updateDate={getValue.bind(null, 'status')}
         />

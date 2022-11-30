@@ -1,5 +1,6 @@
-import {TCar, TDriver, TStatus} from './types';
+import {TAddAction, TCar, TDriver, TStatus} from './types';
 import {
+  ADD_CAR,
   ADD_DRIVER,
   getCarStatuses,
   getDriverStatuses,
@@ -8,8 +9,8 @@ import {
   REQUEST_DRIVERS,
   updateLoad,
   uploadDrivers,
-} from "./action";
-import { addToApi, getApi } from "../../services/api";
+} from './action';
+import {addToApi, getApi} from '../../services/api';
 import {put, call, takeLatest} from '@redux-saga/core/effects';
 
 export function* watchRequests() {
@@ -17,7 +18,8 @@ export function* watchRequests() {
   yield takeLatest(REQUEST_DRIVERS, getDrivers);
 }
 export function* watchaAdding() {
-  yield takeLatest(ADD_DRIVER, addDriver)
+  yield takeLatest(ADD_DRIVER, addDriver);
+  yield takeLatest(ADD_CAR, addCar);
 }
 
 function* getDrivers() {
@@ -39,7 +41,7 @@ function* getDrivers() {
   } catch (e) {
     console.log(e);
   }
-};
+}
 
 function* getCars() {
   try {
@@ -62,7 +64,7 @@ function* getCars() {
   }
 }
 
-function* addDriver(arg) {
+function* addDriver(arg: TAddAction) {
   try {
     yield addToApi('driver', 'post', arg.body).then(res => console.log(res));
     yield put(updateLoad(true));
@@ -73,10 +75,24 @@ function* addDriver(arg) {
     );
     yield put(uploadDrivers(drivers));
     yield put(updateLoad(false));
-  }
-  catch (e){
-    console.log(e)
+  } catch (e) {
+    console.log(e);
   }
 }
 
-
+function* addCar(arg: TAddAction) {
+  try {
+    console.log(arg.body)
+    yield addToApi('car', 'post', arg.body).then(res => console.log(res));
+    yield put(updateLoad(true));
+    const cars: TCar[] = yield call(() =>
+      getApi('car')
+        .then(response => response.json())
+        .then(response => response.data),
+    );
+    yield put(loadCars(cars));
+    yield put(updateLoad(false));
+  } catch (e) {
+    console.log(e);
+  }
+}
