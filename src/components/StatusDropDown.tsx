@@ -1,6 +1,7 @@
 import DropDownPicker from 'react-native-dropdown-picker';
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import { updateCar } from "../redux/depotReducer/action";
 
 export type TLabel = {
   label: string;
@@ -12,7 +13,9 @@ type TStatusProps = {
   init_value: string;
   labels: TLabel[];
   title: string;
-  updateDate: (data: {title: string, code: string}) => void;
+  updateDate?: (data: {title: string; code: string}) => void;
+  updateCard?: (data: {title: string; code: string}) => void;
+
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
@@ -22,8 +25,12 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
 
   const sendValue = (val: string) => {
     let item = items.filter(el => el.value === val)[0];
-    if(props.updateDate){
-      props.updateDate({title: item.value, code: item.code})
+    if (props.updateDate) {
+      props.updateDate({title: item.value, code: item.code});
+    }
+    if (props.updateCard) {
+      console.log({title: item.value, code: item.code})
+      props.updateCard({title: item.value, code: item.code});
     }
   };
 
@@ -41,8 +48,8 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
         style={styles.input}
         listItemContainerStyle={styles.list}
         dropDownContainerStyle={styles.listContainer}
-        onLayout={() => sendValue(value)}
-        onClose={() => sendValue(value)}
+        // onLayout={() => sendValue(value)}
+        onChangeValue={() => sendValue(value)}
       />
     </View>
   );

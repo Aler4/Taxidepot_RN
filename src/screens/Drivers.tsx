@@ -14,24 +14,10 @@ import {
 } from '../redux/depotReducer/selector';
 import {TDriver} from '../redux/depotReducer/types';
 import {DriverCard} from '../components/DriverCard';
-import {requestDrivers} from '../redux/depotReducer/action';
+import { deleteDriver, requestDrivers, updateDriver } from "../redux/depotReducer/action";
 import {AddDriverModal} from '../components/ModalAdd/AddDriverModal';
 
 export const Drivers: React.FC<TDriver[]> = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(requestDrivers());
-  }, [dispatch]);
-
-  const [modalState, setModalState] = useState<boolean>(false);
-  const showModal = useCallback(
-    (value: boolean) => {
-      setModalState(value);
-    },
-    [setModalState],
-  );
-
   const isLoad = useSelector(loadSelector);
   const drivers = useSelector(driversSelector);
   const statuses = useSelector(driverStatusSelector);
@@ -40,16 +26,42 @@ export const Drivers: React.FC<TDriver[]> = () => {
     value: el.title,
     code: el.code,
   }));
+  const dispatch = useDispatch();
+  const [modalState, setModalState] = useState<boolean>(false);
+  const showModal = useCallback(
+    (value: boolean) => {
+      setModalState(value);
+    },
+    [setModalState],
+  );
+
+  const deleteCard = useCallback(
+    (id: number) => {
+      dispatch(deleteDriver(id));
+    },
+    [dispatch, drivers],
+  );
+  const updateCard = useCallback(
+    (data: TDriver) => {
+      console.log(data)
+      dispatch(updateDriver(data));
+    },
+    [dispatch],
+  );
+  useEffect(() => {
+    dispatch(requestDrivers());
+  }, [dispatch]);
+
   return isLoad ? (
     <Text>Load...</Text>
   ) : (
     <SafeAreaView style={styles.container}>
       <FlatList
         contentContainerStyle={styles.list}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => (item.id as number).toString()}
         data={drivers}
         renderItem={({item}) => (
-          <DriverCard driver={item} status_list={listItems} />
+          <DriverCard driver={item} status_list={listItems} delCard={deleteCard} updateCard={updateCard}/>
         )}
       />
       <TouchableOpacity

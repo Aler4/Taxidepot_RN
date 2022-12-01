@@ -34,7 +34,8 @@ export type TStatus = {
 };
 
 export type TAddAction = {
-  body: TCar | TDriver;
+  body?: TCar | TDriver;
+  id?: number;
   type: string;
 };
 export interface IState {

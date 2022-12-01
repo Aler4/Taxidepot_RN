@@ -2,9 +2,13 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
-export const DeleteBtn: React.FC = () => {
+type TProps = {
+  handler: () => void;
+}
+
+export const DeleteBtn: React.FC<TProps> = ({handler}) => {
   return (
-    <TouchableOpacity style={styles.deleteBtn}>
+    <TouchableOpacity style={styles.deleteBtn} onPress={handler}>
       <Icon name="delete" color={'#a50606'} size={25} />
     </TouchableOpacity>
   );

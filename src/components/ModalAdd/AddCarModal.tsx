@@ -43,7 +43,7 @@ export const AddCarModal: React.FC<TModalProps> = ({
 
   const getValue = useCallback(
     (key: string, value: TData) => {
-      if ([key] == 'year' || [key] == 'driver_id') {
+      if (key == 'year' || key == 'driver_id') {
         value = +(value as string);
       }
       setCar({...car, [key]: value});
@@ -60,8 +60,8 @@ export const AddCarModal: React.FC<TModalProps> = ({
 
   return (
     <Modal visible={isVisible} style={styles.container}>
-      <ModalInput title={'Модель'} updateData={getValue.bind(null, 'model')} />
       <ModalInput title={'Марка'} updateData={getValue.bind(null, 'mark')} />
+      <ModalInput title={'Модель'} updateData={getValue.bind(null, 'model')} />
       <ModalInput title={'Рік'} updateData={getValue.bind(null, 'year')} />
       <ModalInput
         title={'Номер авто'}

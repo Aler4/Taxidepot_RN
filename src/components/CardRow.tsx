@@ -2,11 +2,14 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, Pressable} from 'react-native';
 
 import {useEditing} from '../hooks/useEditing';
+import { TCar, TDriver } from "../redux/depotReducer/types";
+
 
 interface RowProps {
   title: string;
   info: string | number;
   editable?: boolean;
+  updateHandler?: (value: string | number) => void;
 }
 
 export const CardRow: React.FC<RowProps> = props => {
@@ -25,8 +28,12 @@ export const CardRow: React.FC<RowProps> = props => {
 
   const endHandler = () => {
     if (props.editable) {
+      if (props.updateHandler) {
+        props.updateHandler(value);
+      }
       return editable.endEdit();
     }
+
     return null;
   };
 

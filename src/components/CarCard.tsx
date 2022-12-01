@@ -10,13 +10,18 @@ import {StatusDropDown, TLabel} from './StatusDropDown';
 interface CarProps {
   car: TCar;
   status_list: TLabel[];
+  delCard: (id: number) => void;
 }
 
-export const CarCard: React.FC<CarProps> = ({car, status_list}) => {
+export const CarCard: React.FC<CarProps> = ({car, status_list,delCard}) => {
+  const deleteHandler = useCallback(() => {
+    delCard(car.id as number);
+  }, [car.id, delCard]);
+
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
-        <CardRow title={'Ід: '} info={car.id} />
+        <CardRow title={'Ід: '} info={car.id as number} />
         <CardRow title={'Автомобіль: '} info={car.mark} editable={true} />
         <CardRow title={'Модель: '} info={car.model} editable={true} />
         <CardRow title={'Номер: '} info={car.number} editable={true} />
@@ -28,7 +33,7 @@ export const CarCard: React.FC<CarProps> = ({car, status_list}) => {
         />
 
         <View style={styles.actionContainer}>
-          <DeleteBtn />
+          <DeleteBtn handler={deleteHandler} />
           <LinkBtn icon_name={'account'} />
         </View>
       </View>

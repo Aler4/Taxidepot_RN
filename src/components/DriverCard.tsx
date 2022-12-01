@@ -1,28 +1,54 @@
-import React from 'react';
+import React, { useCallback, useState } from "react";
 import {StyleSheet, View} from 'react-native';
-import { TDriver, TStatus } from "../redux/depotReducer/types";
+import {TDriver, TStatus} from '../redux/depotReducer/types';
 import DropShadow from 'react-native-drop-shadow';
 import {CardRow} from './CardRow';
 import {formatDate} from '../helpers/formatDate';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
-import { StatusDropDown, TLabel } from "./StatusDropDown";
-
+import {StatusDropDown, TLabel} from './StatusDropDown';
 
 interface IDriverProps {
   driver: TDriver;
   status_list: TLabel[];
+  delCard: (id: number) => void;
+  updateCard: (data: TDriver) => void;
 }
+type TValue = string | number | {title: string, code: string}
 
-export const DriverCard: React.FC<IDriverProps> = ({driver, status_list}) => {
+export const DriverCard: React.FC<IDriverProps> = ({
+  driver,
+  status_list,
+  delCard,
+  updateCard,
+}) => {
+
+  const [cardData, setCardData] = useState<TDriver>(driver)
+  const deleteHandler = useCallback(() => {
+    delCard(driver.id as number);
+  }, [driver.id]);
+
+  const updateCardData = useCallback(
+    (data: TDriver, key: string, value: TValue) => {
+      setCardData({...data, [key]: value});
+      updateCard(cardData);
+  }, [cardData, updateCard]);
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
         <CardRow title={'Ід: '} info={`${driver.id}`} />
         <CardRow
-          title={'ФІО: '}
-          info={`${driver.first_name} ${driver.last_name}`}
+          title={"Ім'я: "}
+          info={`${driver.first_name}`}
           editable={true}
+          updateHandler={updateCardData.bind(null, cardData, 'first_name')}
+        />
+        <CardRow
+          title={'Прізвище: '}
+          info={`${driver.last_name}`}
+          editable={true}
+          updateHandler={updateCardData.bind(null, cardData, 'last_name')}
+
         />
         <CardRow
           title={'Дата реєстрації: '}
@@ -32,15 +58,17 @@ export const DriverCard: React.FC<IDriverProps> = ({driver, status_list}) => {
           title={'Дата народження: '}
           info={`${formatDate(driver.date_birth)}`}
           editable={true}
+          updateHandler={updateCardData.bind(null, cardData, 'date_birth')}
         />
         <StatusDropDown
           init_value={driver.status.title}
           labels={status_list}
           title={'Статус'}
+          updateCard={updateCardData.bind(null, cardData, 'status')}
         />
 
         <View style={styles.actionContainer}>
-          <DeleteBtn />
+          <DeleteBtn handler={deleteHandler} />
           <LinkBtn icon_name={'car'} />
         </View>
       </View>
