@@ -10,11 +10,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   carsSelector,
   carStatusSelector,
+  driversSelector,
   loadSelector,
 } from '../redux/depotReducer/selector';
 import {CarCard} from '../components/CarCard';
 import {TCar} from '../redux/depotReducer/types';
-import { deleteCar, requestCars } from "../redux/depotReducer/action";
+import {deleteCar, requestCars} from '../redux/depotReducer/action';
 import {AddCarModal} from '../components/ModalAdd/AddCarModal';
 
 export const Cars: React.FC<TCar[]> = () => {
@@ -32,7 +33,7 @@ export const Cars: React.FC<TCar[]> = () => {
     (id: number) => {
       dispatch(deleteCar(id));
     },
-    [dispatch,cars],
+    [dispatch, cars],
   );
   const showModal = useCallback(
     (value: boolean) => {
@@ -40,10 +41,11 @@ export const Cars: React.FC<TCar[]> = () => {
     },
     [setModalState],
   );
-
   useEffect(() => {
     dispatch(requestCars());
+
   }, [dispatch]);
+
 
   return isLoad ? (
     <Text>Loading...</Text>
@@ -53,7 +55,9 @@ export const Cars: React.FC<TCar[]> = () => {
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
         data={cars}
-        renderItem={({item}) => <CarCard car={item} status_list={listItems} delCard={deleteCard}/>}
+        renderItem={({item}) => (
+          <CarCard car={item} status_list={listItems} delCard={deleteCard} />
+        )}
       />
 
       <TouchableOpacity

@@ -29,7 +29,7 @@ export function* watchDeleting() {
   yield takeLatest(DELETE_CAR, deleteCar);
 }
 export function* watchUpdate() {
-  yield takeLatest(UPDATE_DRIVER, updateDriver);
+  yield takeLatest(UPDATE_DRIVER, updateDriverCard);
 }
 function* getDrivers() {
   try {
@@ -75,7 +75,7 @@ function* getCars() {
 
 function* addDriver(arg: TAddAction) {
   try {
-    yield addToApi('driver', 'post', arg.body);
+    yield addToApi('driver', 'post', arg.body).then(res => console.log(res));
     yield getDrivers();
   } catch (e) {
     console.log(e);
@@ -109,11 +109,10 @@ function* deleteDriver(arg: TAddAction) {
   }
 }
 
-function* updateDriver(arg: TAddAction) {
+function* updateDriverCard(arg: TAddAction) {
   try {
-    console.log(arg.body)
-    yield addToApi('driver', 'put', arg.body, (arg.body as TDriver).id).then(res => console.log(res));
-    // yield getDrivers();
+    yield addToApi('driver', 'put', arg.body, arg.id);
+    yield getDrivers();
   } catch (e) {
     console.log(e);
   }

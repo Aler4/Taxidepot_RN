@@ -14,7 +14,11 @@ import {
 } from '../redux/depotReducer/selector';
 import {TDriver} from '../redux/depotReducer/types';
 import {DriverCard} from '../components/DriverCard';
-import { deleteDriver, requestDrivers, updateDriver } from "../redux/depotReducer/action";
+import {
+  deleteDriver, requestCars,
+  requestDrivers,
+  updateDriver,
+} from "../redux/depotReducer/action";
 import {AddDriverModal} from '../components/ModalAdd/AddDriverModal';
 
 export const Drivers: React.FC<TDriver[]> = () => {
@@ -42,14 +46,16 @@ export const Drivers: React.FC<TDriver[]> = () => {
     [dispatch, drivers],
   );
   const updateCard = useCallback(
-    (data: TDriver) => {
-      console.log(data)
-      dispatch(updateDriver(data));
+    (data: TDriver, id: number) => {
+      delete data.id;
+      delete data.date_created;
+      dispatch(updateDriver(data, id));
     },
     [dispatch],
   );
   useEffect(() => {
     dispatch(requestDrivers());
+    dispatch(requestCars());
   }, [dispatch]);
 
   return isLoad ? (
@@ -61,7 +67,12 @@ export const Drivers: React.FC<TDriver[]> = () => {
         keyExtractor={item => (item.id as number).toString()}
         data={drivers}
         renderItem={({item}) => (
-          <DriverCard driver={item} status_list={listItems} delCard={deleteCard} updateCard={updateCard}/>
+          <DriverCard
+            driver={item}
+            status_list={listItems}
+            delCard={deleteCard}
+            updateCard={updateCard}
+          />
         )}
       />
       <TouchableOpacity

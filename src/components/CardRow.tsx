@@ -1,20 +1,20 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {StyleSheet, Text, TextInput, Pressable} from 'react-native';
 
 import {useEditing} from '../hooks/useEditing';
-import { TCar, TDriver } from "../redux/depotReducer/types";
+
 
 
 interface RowProps {
   title: string;
   info: string | number;
+  length?: number,
   editable?: boolean;
   updateHandler?: (value: string | number) => void;
 }
 
 export const CardRow: React.FC<RowProps> = props => {
-  let initValue =
-    typeof props.info === 'number' ? props.info.toString() : props.info;
+  let initValue = typeof props.info === 'number' ? props.info.toString() : props.info;
   const [value, setValue] = useState(initValue);
   const [isEdit, setIsEdit] = useState(false);
   const editable = useEditing(isEdit, setIsEdit);
@@ -26,9 +26,11 @@ export const CardRow: React.FC<RowProps> = props => {
     return null;
   };
 
+
   const endHandler = () => {
+    setValue(value)
     if (props.editable) {
-      if (props.updateHandler) {
+      if (props.updateHandler && value !== initValue) {
         props.updateHandler(value);
       }
       return editable.endEdit();
@@ -44,7 +46,7 @@ export const CardRow: React.FC<RowProps> = props => {
         style={isEdit ? [styles.input, styles.inpAct] : styles.input}
         value={value}
         onChangeText={setValue}
-        maxLength={30}
+        maxLength={props.length ? props.length : 30}
         onEndEditing={() => endHandler()}
         autoFocus={isEdit}
         editable={isEdit}

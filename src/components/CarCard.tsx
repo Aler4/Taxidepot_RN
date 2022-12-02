@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 import {TCar} from '../redux/depotReducer/types';
@@ -6,6 +6,8 @@ import {CardRow} from './CardRow';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
+import {makeCompare} from '../helpers/compareData';
+import {TValue} from './DriverCard';
 
 interface CarProps {
   car: TCar;
@@ -13,7 +15,12 @@ interface CarProps {
   delCard: (id: number) => void;
 }
 
-export const CarCard: React.FC<CarProps> = ({car, status_list,delCard}) => {
+export const CarCard: React.FC<CarProps> = ({
+  car,
+  status_list,
+  delCard,
+}) => {
+
   const deleteHandler = useCallback(() => {
     delCard(car.id as number);
   }, [car.id, delCard]);
@@ -22,10 +29,10 @@ export const CarCard: React.FC<CarProps> = ({car, status_list,delCard}) => {
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
         <CardRow title={'Ід: '} info={car.id as number} />
-        <CardRow title={'Автомобіль: '} info={car.mark} editable={true} />
-        <CardRow title={'Модель: '} info={car.model} editable={true} />
-        <CardRow title={'Номер: '} info={car.number} editable={true} />
-        <CardRow title={'Рік: '} info={car.year.toString()} editable={true} />
+        <CardRow title={'Автомобіль: '} info={car.mark} />
+        <CardRow title={'Модель: '} info={car.model} />
+        <CardRow title={'Номер: '} info={car.number} />
+        <CardRow title={'Рік: '} info={car.year.toString()} length={4} />
         <StatusDropDown
           init_value={car.status.title}
           labels={status_list}

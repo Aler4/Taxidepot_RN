@@ -26,13 +26,21 @@ export const getCarStatuses = (data: TStatus[]) => ({
   type: UPLOAD_CAR_STATUSES,
 });
 
-export const getDriverStatuses = (data: TStatus[]) => ({
+export const getDriverStatuses = (data: TStatus[],) => ({
   data,
   type: UPLOAD_DRIVER_STATUSES,
 });
 
-export const updateDriver = (body: TDriver) => ({body, type: UPDATE_DRIVER});
-export const updateCar = (data: TCar) => ({data, type: UPDATE_CAR});
+export const updateDriver = (body: TDriver, id: number) => ({
+  body,
+  id,
+  type: UPDATE_DRIVER,
+});
+export const updateCar = (cars: TCar[], drivers: TDriver[]) => ({
+  cars,
+  drivers,
+  type: UPDATE_CAR,
+});
 export const deleteDriver = (id: number) => ({id, type: DELETE_DRIVER});
 export const deleteCar = (id: number) => ({id, type: DELETE_CAR});
 export const addDriver = (body: TDriver) => ({body, type: ADD_DRIVER});

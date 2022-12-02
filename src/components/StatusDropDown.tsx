@@ -48,7 +48,7 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
         style={styles.input}
         listItemContainerStyle={styles.list}
         dropDownContainerStyle={styles.listContainer}
-        // onLayout={() => sendValue(value)}
+        onLayout={() => sendValue(value)}
         onChangeValue={() => sendValue(value)}
       />
     </View>

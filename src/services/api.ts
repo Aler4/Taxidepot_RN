@@ -14,7 +14,12 @@ export const getApi = (derictory: string) => {
   });
 };
 
-export const addToApi = (derictory: string, method: string, body?: TCar | TDriver | undefined, id?: number,) => {
+export const addToApi = (
+  derictory: string,
+  method: string,
+  body?: TCar | TDriver | undefined,
+  id?: number,
+) => {
   if (!derictory || !method) {
     throw Error('not enough arguments');
   }
@@ -24,6 +29,7 @@ export const addToApi = (derictory: string, method: string, body?: TCar | TDrive
   if (method === 'PUT' && id) {
     url = `https://edu.evgeniychvertkov.com/v1/${derictory}/${id}/`;
   }
+  console.log(body)
   console.log(method)
   return fetch(url, {
     method: `${method}`,
@@ -45,7 +51,6 @@ export const deleteFromApi = (derictory: string, id: number | undefined) => {
     headers: {
       'X-Authorization':
         'apibb4d351a27bd4fea213bb5e3fb7213a403bcb8622fd8e005df288dd19f46e57d',
-      // 'Content-Type': 'application/json',
     },
   });
 };

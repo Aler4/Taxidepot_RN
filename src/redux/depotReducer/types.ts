@@ -18,6 +18,7 @@ export type TDriver = {
 
 export type TCar = {
   id?: number;
+  driver?: string;
   model: string;
   mark: string;
   year: number;
@@ -36,6 +37,8 @@ export type TStatus = {
 export type TAddAction = {
   body?: TCar | TDriver;
   id?: number;
+  cars?: TCar[];
+  drivers?: TDriver[];
   type: string;
 };
 export interface IState {

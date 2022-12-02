@@ -1,20 +1,21 @@
-import React, { useCallback, useState } from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {TDriver, TStatus} from '../redux/depotReducer/types';
+import {TDriver} from '../redux/depotReducer/types';
 import DropShadow from 'react-native-drop-shadow';
 import {CardRow} from './CardRow';
-import {formatDate} from '../helpers/formatDate';
+import {formatDate, TDate} from '../helpers/formatDate';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
+import {makeCompare} from '../helpers/compareData';
 
 interface IDriverProps {
   driver: TDriver;
   status_list: TLabel[];
   delCard: (id: number) => void;
-  updateCard: (data: TDriver) => void;
+  updateCard: (data: TDriver, id: number) => void;
 }
-type TValue = string | number | {title: string, code: string}
+export type TValue = string | number | {title: string; code: string} | null;
 
 export const DriverCard: React.FC<IDriverProps> = ({
   driver,
@@ -22,17 +23,26 @@ export const DriverCard: React.FC<IDriverProps> = ({
   delCard,
   updateCard,
 }) => {
-
-  const [cardData, setCardData] = useState<TDriver>(driver)
+  const [cardData, setCardData] = useState<TDriver>({...driver});
   const deleteHandler = useCallback(() => {
     delCard(driver.id as number);
-  }, [driver.id]);
+  }, [delCard, driver.id]);
 
   const updateCardData = useCallback(
-    (data: TDriver, key: string, value: TValue) => {
-      setCardData({...data, [key]: value});
-      updateCard(cardData);
-  }, [cardData, updateCard]);
+    (key: string, value: TValue | TDate) => {
+      if (key == 'date_birth' && value) {
+        value = formatDate(value.toString());
+      }
+      setCardData({...cardData, [key]: value});
+    },
+    [cardData, setCardData],
+  );
+
+  useEffect(() => {
+    makeCompare(driver, cardData) &&
+      updateCard(cardData, cardData.id as number);
+  }, [cardData, driver, updateCard]);
+
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
@@ -41,14 +51,13 @@ export const DriverCard: React.FC<IDriverProps> = ({
           title={"Ім'я: "}
           info={`${driver.first_name}`}
           editable={true}
-          updateHandler={updateCardData.bind(null, cardData, 'first_name')}
+          updateHandler={updateCardData.bind(null, 'first_name')}
         />
         <CardRow
           title={'Прізвище: '}
           info={`${driver.last_name}`}
           editable={true}
-          updateHandler={updateCardData.bind(null, cardData, 'last_name')}
-
+          updateHandler={updateCardData.bind(null, 'last_name')}
         />
         <CardRow
           title={'Дата реєстрації: '}
@@ -57,14 +66,15 @@ export const DriverCard: React.FC<IDriverProps> = ({
         <CardRow
           title={'Дата народження: '}
           info={`${formatDate(driver.date_birth)}`}
+          length={10}
           editable={true}
-          updateHandler={updateCardData.bind(null, cardData, 'date_birth')}
+          updateHandler={updateCardData.bind(null, 'date_birth')}
         />
         <StatusDropDown
           init_value={driver.status.title}
           labels={status_list}
           title={'Статус'}
-          updateCard={updateCardData.bind(null, cardData, 'status')}
+          updateCard={updateCardData.bind(null, 'status')}
         />
 
         <View style={styles.actionContainer}>
