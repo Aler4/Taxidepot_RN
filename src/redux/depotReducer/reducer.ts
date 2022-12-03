@@ -1,5 +1,6 @@
-import {IState, TDriver, TCar, TStatus, TReducer } from "./types";
+import {IState, TDriver, TCar, TStatus, TReducer} from './types';
 import {
+  UPDATE_CARS,
   UPDATE_LOADER,
   UPLOAD_CAR_STATUSES,
   UPLOAD_CARS,
@@ -26,6 +27,11 @@ export const depotReducer: TReducer = (
         isLoad: action.data as boolean,
       };
     case UPLOAD_CARS:
+      return {
+        ...state,
+        cars: action.data as TCar[],
+      };
+    case UPDATE_CARS:
       return {
         ...state,
         cars: action.data as TCar[],

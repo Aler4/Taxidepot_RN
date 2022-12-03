@@ -6,8 +6,6 @@ import {CardRow} from './CardRow';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
-import {makeCompare} from '../helpers/compareData';
-import {TValue} from './DriverCard';
 
 interface CarProps {
   car: TCar;
@@ -20,7 +18,10 @@ export const CarCard: React.FC<CarProps> = ({
   status_list,
   delCard,
 }) => {
-
+  const [cardData, setCardData] = useState(car);
+  useEffect(() => {
+    setCardData(car)
+  },[car]);
   const deleteHandler = useCallback(() => {
     delCard(car.id as number);
   }, [car.id, delCard]);
@@ -28,11 +29,12 @@ export const CarCard: React.FC<CarProps> = ({
   return (
     <DropShadow style={styles.shadow}>
       <View style={styles.card}>
-        <CardRow title={'Ід: '} info={car.id as number} />
-        <CardRow title={'Автомобіль: '} info={car.mark} />
-        <CardRow title={'Модель: '} info={car.model} />
-        <CardRow title={'Номер: '} info={car.number} />
-        <CardRow title={'Рік: '} info={car.year.toString()} length={4} />
+        <CardRow title={'Ід: '} info={cardData.id as number} />
+        <CardRow title={'Власник: '} info={cardData.driver as string} />
+        <CardRow title={'Автомобіль: '} info={cardData.mark} />
+        <CardRow title={'Модель: '} info={cardData.model} />
+        <CardRow title={'Номер: '} info={cardData.number} />
+        <CardRow title={'Рік: '} info={cardData.year.toString()} length={4} />
         <StatusDropDown
           init_value={car.status.title}
           labels={status_list}

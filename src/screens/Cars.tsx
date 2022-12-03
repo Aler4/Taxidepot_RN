@@ -15,12 +15,14 @@ import {
 } from '../redux/depotReducer/selector';
 import {CarCard} from '../components/CarCard';
 import {TCar} from '../redux/depotReducer/types';
-import {deleteCar, requestCars} from '../redux/depotReducer/action';
+import { deleteCar, requestCars, updateCar } from "../redux/depotReducer/action";
 import {AddCarModal} from '../components/ModalAdd/AddCarModal';
+import { mergeProp } from "../helpers/mergeProp";
 
 export const Cars: React.FC<TCar[]> = () => {
   const dispatch = useDispatch();
   const cars = useSelector(carsSelector);
+  const drivers = useSelector(driversSelector);
   const isLoad = useSelector(loadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
@@ -32,6 +34,7 @@ export const Cars: React.FC<TCar[]> = () => {
   const deleteCard = useCallback(
     (id: number) => {
       dispatch(deleteCar(id));
+
     },
     [dispatch, cars],
   );
@@ -46,6 +49,11 @@ export const Cars: React.FC<TCar[]> = () => {
 
   }, [dispatch]);
 
+  useEffect(() => {
+    if (cars) {
+      dispatch(updateCar(mergeProp(cars, drivers)))
+    }
+  },[requestCars])
 
   return isLoad ? (
     <Text>Loading...</Text>

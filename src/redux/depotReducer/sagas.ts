@@ -15,6 +15,7 @@ import {
 } from './action';
 import {addToApi, deleteFromApi, getApi} from '../../services/api';
 import {put, call, takeLatest} from '@redux-saga/core/effects';
+import {mergeProp} from '../../helpers/mergeProp';
 
 export function* watchRequests() {
   yield takeLatest(REQUEST_CARS, getCars);
@@ -54,6 +55,7 @@ function* getDrivers() {
 
 function* getCars() {
   try {
+    console.log('dsad');
     yield put(updateLoad(true));
     const cars: TCar[] = yield call(() =>
       getApi('car')
@@ -65,8 +67,14 @@ function* getCars() {
         .then(res => res.json())
         .then(res => res.data),
     );
+    const drivers: TDriver[] = yield call(() =>
+      getApi('driver')
+        .then(response => response.json())
+        .then(response => response.data),
+    );
+
     yield put(getCarStatuses(statuses));
-    yield put(loadCars(cars));
+    yield put(loadCars(mergeProp(cars, drivers)));
     yield put(updateLoad(false));
   } catch (e) {
     console.log(e);
@@ -85,6 +93,7 @@ function* addDriver(arg: TAddAction) {
 function* addCar(arg: TAddAction) {
   try {
     yield addToApi('car', 'post', arg.body);
+    yield getDrivers();
     yield getCars();
   } catch (e) {
     console.log(e);
