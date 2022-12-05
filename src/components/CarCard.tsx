@@ -43,7 +43,7 @@ export const CarCard: React.FC<CarProps> = ({
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
-          <LinkBtn icon_name={'account'} />
+          <LinkBtn icon_name={'account'} route={() => console.log('sad')} />
         </View>
       </View>
     </DropShadow>

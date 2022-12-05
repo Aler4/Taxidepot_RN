@@ -8,6 +8,7 @@ import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
 import {makeCompare} from '../helpers/compareData';
+import {useNavigation} from '@react-navigation/native';
 
 interface IDriverProps {
   driver: TDriver;
@@ -24,6 +25,8 @@ export const DriverCard: React.FC<IDriverProps> = ({
   updateCard,
 }) => {
   const [cardData, setCardData] = useState<TDriver>({...driver});
+  const nav = useNavigation();
+
   const deleteHandler = useCallback(() => {
     delCard(driver.id as number);
   }, [delCard, driver.id]);
@@ -79,7 +82,7 @@ export const DriverCard: React.FC<IDriverProps> = ({
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
-          <LinkBtn icon_name={'car'} />
+          <LinkBtn icon_name={'car'} route={() => nav.navigate('Cars', {id: driver.id})} />
         </View>
       </View>
     </DropShadow>

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   SafeAreaView,
   FlatList,
@@ -10,19 +10,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   carsSelector,
   carStatusSelector,
-  driversSelector,
   loadSelector,
 } from '../redux/depotReducer/selector';
 import {CarCard} from '../components/CarCard';
-import {TCar} from '../redux/depotReducer/types';
-import { deleteCar, requestCars, updateCar } from "../redux/depotReducer/action";
+import {deleteCar, requestCars} from '../redux/depotReducer/action';
 import {AddCarModal} from '../components/ModalAdd/AddCarModal';
-import { mergeProp } from "../helpers/mergeProp";
 
-export const Cars: React.FC<TCar[]> = () => {
+type TProps = {
+  route: {params: {id: number}};
+};
+
+export const Cars: React.FC<TProps> = ({route}) => {
   const dispatch = useDispatch();
-  const cars = useSelector(carsSelector);
-  const drivers = useSelector(driversSelector);
+  let data = route.params;
+  let [id, setId] = useState<number>(0);
+  let cars = useSelector(carsSelector)
   const isLoad = useSelector(loadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
@@ -34,7 +36,6 @@ export const Cars: React.FC<TCar[]> = () => {
   const deleteCard = useCallback(
     (id: number) => {
       dispatch(deleteCar(id));
-
     },
     [dispatch, cars],
   );
@@ -46,14 +47,21 @@ export const Cars: React.FC<TCar[]> = () => {
   );
   useEffect(() => {
     dispatch(requestCars());
-
   }, [dispatch]);
 
   useEffect(() => {
-    if (cars) {
-      dispatch(updateCar(mergeProp(cars, drivers)))
+    if (data && data.id){
+      return setId(data.id);
     }
-  },[requestCars])
+    if (id === data.id){
+      return setId(0);
+    }
+  }, [cars, data, id]);
+
+  const cards = useMemo(() => {
+    let car = id !== 0 ? cars.filter(el => el.driver_id === id) : cars;
+    return car;
+  }, [cars, id]);
 
   return isLoad ? (
     <Text>Loading...</Text>
@@ -62,7 +70,7 @@ export const Cars: React.FC<TCar[]> = () => {
       <FlatList
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={cars}
+        data={cards}
         renderItem={({item}) => (
           <CarCard car={item} status_list={listItems} delCard={deleteCard} />
         )}
