@@ -20,6 +20,7 @@ import {
   updateDriver,
 } from "../redux/depotReducer/action";
 import {AddDriverModal} from '../components/ModalAdd/AddDriverModal';
+import { LoadView } from "../components/LoadView";
 
 export const Drivers: React.FC<TDriver[]> = () => {
   const isLoad = useSelector(loadSelector);
@@ -58,9 +59,10 @@ export const Drivers: React.FC<TDriver[]> = () => {
     dispatch(requestCars());
   }, [dispatch]);
 
-  return isLoad ? (
-    <Text>Load...</Text>
-  ) : (
+  if (isLoad) {
+    return <LoadView />
+  }
+  return (
     <SafeAreaView style={styles.container}>
       <FlatList
         contentContainerStyle={styles.list}

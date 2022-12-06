@@ -15,6 +15,7 @@ import {
 import {CarCard} from '../components/CarCard';
 import {deleteCar, requestCars} from '../redux/depotReducer/action';
 import {AddCarModal} from '../components/ModalAdd/AddCarModal';
+import { LoadView } from "../components/LoadView";
 
 type TProps = {
   route: {params: {id: number}};
@@ -53,9 +54,6 @@ export const Cars: React.FC<TProps> = ({route}) => {
     if (data && data.id){
       return setId(data.id);
     }
-    if (id === data.id){
-      return setId(0);
-    }
   }, [cars, data, id]);
 
   const cards = useMemo(() => {
@@ -63,9 +61,10 @@ export const Cars: React.FC<TProps> = ({route}) => {
     return car;
   }, [cars, id]);
 
-  return isLoad ? (
-    <Text>Loading...</Text>
-  ) : (
+  if (isLoad) {
+    return <LoadView />
+  }
+  return  (
     <SafeAreaView style={styles.container}>
       <FlatList
         contentContainerStyle={styles.list}

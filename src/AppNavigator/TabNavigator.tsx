@@ -10,8 +10,6 @@ import { requestCars } from "../redux/depotReducer/action";
 const Tabs = createMaterialBottomTabNavigator();
 
 export const AppTabs: React.FC = () => {
-  let dispatch = useDispatch();
-  let nav = useNavigation()
   return (
     <Tabs.Navigator
       activeColor="#f0edf6"
@@ -33,13 +31,6 @@ export const AppTabs: React.FC = () => {
       <Tabs.Screen
         name="Cars"
         component={Cars}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            dispatch(requestCars());
-            nav.navigate('Cars', {id: 0});
-          },
-        }}
         options={{
           tabBarAccessibilityLabel: 'Todo',
           tabBarIcon: ({color}) => (

@@ -62,11 +62,12 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   title: {
-    fontStyle: 'italic',
+    fontFamily: 'gilroy',
+
     opacity: 0.8,
   },
   info: {
-    fontFamily: 'GothamPro',
+    fontFamily: 'gilroy',
   },
   visible: {
     display: 'flex',

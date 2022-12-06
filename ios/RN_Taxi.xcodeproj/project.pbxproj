@@ -30,6 +30,8 @@
 		D5310F4FCBCD466CBA34D20C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA2A34C409A744A0847B9FF5 /* Octicons.ttf */; };
 		FFA5FFAD12D34B38B6979A70 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 28065169D44545A09B7A2D38 /* SimpleLineIcons.ttf */; };
 		293A5DC1ECCA499BA65B09D4 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1AE0923D6934002A9FEFC30 /* Zocial.ttf */; };
+		D139CD9094E84448A90C2E11 /* gilroy-medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9FB54C89EA74470EB3CBD3EB /* gilroy-medium.ttf */; };
+		18DA798418FA41A6B32EFC6F /* GothamPro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F001B1755E449F6ACD58336 /* GothamPro.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +78,8 @@
 		BA2A34C409A744A0847B9FF5 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../src/assets/fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		28065169D44545A09B7A2D38 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../src/assets/fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		E1AE0923D6934002A9FEFC30 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../src/assets/fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9FB54C89EA74470EB3CBD3EB /* gilroy-medium.ttf */ = {isa = PBXFileReference; name = "gilroy-medium.ttf"; path = "../src/assets/fonts/gilroy-medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4F001B1755E449F6ACD58336 /* GothamPro.ttf */ = {isa = PBXFileReference; name = "GothamPro.ttf"; path = "../src/assets/fonts/GothamPro.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +204,8 @@
 				BA2A34C409A744A0847B9FF5 /* Octicons.ttf */,
 				28065169D44545A09B7A2D38 /* SimpleLineIcons.ttf */,
 				E1AE0923D6934002A9FEFC30 /* Zocial.ttf */,
+				9FB54C89EA74470EB3CBD3EB /* gilroy-medium.ttf */,
+				4F001B1755E449F6ACD58336 /* GothamPro.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -317,6 +323,8 @@
 				D5310F4FCBCD466CBA34D20C /* Octicons.ttf in Resources */,
 				FFA5FFAD12D34B38B6979A70 /* SimpleLineIcons.ttf in Resources */,
 				293A5DC1ECCA499BA65B09D4 /* Zocial.ttf in Resources */,
+				D139CD9094E84448A90C2E11 /* gilroy-medium.ttf in Resources */,
+				18DA798418FA41A6B32EFC6F /* GothamPro.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

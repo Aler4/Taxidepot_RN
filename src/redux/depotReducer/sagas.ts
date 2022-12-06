@@ -120,8 +120,11 @@ function* deleteDriver(arg: TAddAction) {
 
 function* updateDriverCard(arg: TAddAction) {
   try {
-    yield addToApi('driver', 'put', arg.body, arg.id);
-    yield getDrivers();
+    console.log(arg.body)
+    yield call( () =>
+      addToApi('driver', 'put', arg.body, arg.id).then(res => console.log(res)),
+    );
+    yield call(() => getDrivers());
   } catch (e) {
     console.log(e);
   }

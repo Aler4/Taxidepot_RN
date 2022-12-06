@@ -42,6 +42,14 @@
       "sha1": "4b2bce6c792493a4a5716b6fec2dbefe89492c3f"
     },
     {
+      "path": "src/assets/fonts/gilroy-medium.ttf",
+      "sha1": "273a04108115357ca42857ea26448b0269661551"
+    },
+    {
+      "path": "src/assets/fonts/GothamPro.ttf",
+      "sha1": "2d4b91c13dd38f9d175fcb70b7daa1ab17441a45"
+    },
+    {
       "path": "src/assets/fonts/Ionicons.ttf",
       "sha1": "b5281fbfa43129abc3e412dd938cfcf0b77de999"
     },
