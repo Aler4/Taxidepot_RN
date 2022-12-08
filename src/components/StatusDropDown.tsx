@@ -1,16 +1,14 @@
-// import DropDownPicker from 'react-native-dropdown-picker';
-import React, {useState} from 'react';
+import React, {useMemo, useState } from "react";
 import {StyleSheet, Text, View} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
 export type TLabel = {
-  label: string;
   value: string;
   code: string;
 };
 
 type TStatusProps = {
-  init_value: string;
+  init_value?: string;
   labels: TLabel[];
   title: string;
   updateDate?: (data: {title: string; code: string}) => void;
@@ -19,48 +17,41 @@ type TStatusProps = {
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
-  const [value, setValue] = useState(props.init_value);
+  console.log(props.init_value);
+  const [selectedValue, setSelectedValue] = useState(props.init_value);
+  console.log(selectedValue)
   const [items, setItems] = useState(props.labels);
 
-  const sendValue = val => {
+  const sendValue = (val: string) => {
+    setSelectedValue(val)
     let item = items.filter(el => el.code === val)[0];
     if (props.updateDate) {
-      props.updateDate({title: value, code: item.code});
+      props.updateDate({title: item.value, code: item.code});
     }
     if (props.updateCard) {
       props.updateCard({title: item.value, code: item.code});
     }
   };
-  const pickers = items.map(el => (
-    <Picker.Item key={el.code} label={el.value} value={el.code} />
-  ));
-  const changeValue = (val) => {
-    setValue(val);
-    sendValue(val);
-  }
+  const pickers = useMemo(() => {
+    if (props.init_value) {
+      let index: number = items.findIndex(el => el.value == props.init_value);
+      [items[0], items[index]] = [items[index], items[0]];
+    }
+    return items.map(el => (
+      <Picker.Item key={el.value} label={el.value} value={el.code} />
+    ));
+  }, [items, props.init_value]);
 
+  console.log(pickers)
   return (
     <View style={styles.row}>
       <Text>{`${props.title}: `}</Text>
-      {/*<DropDownPicker*/}
-      {/*  open={open}*/}
-      {/*  value={value}*/}
-      {/*  items={items}*/}
-      {/*  setOpen={setOpen}*/}
-      {/*  setValue={setValue}*/}
-      {/*  setItems={setItems}*/}
-      {/*  showArrowIcon={false}*/}
-      {/*  style={styles.input}*/}
-      {/*  listItemContainerStyle={styles.list}*/}
-      {/*  dropDownContainerStyle={styles.listContainer}*/}
-      {/*  onLayout={() => sendValue(value)}*/}
-      {/*  onChangeValue={() => sendValue(value)}*/}
-      {/*/>*/}
       <Picker
         style={styles.input}
+        prompt={'Status'}
         mode={'dialog'}
-        selectedValue={value}
-        onValueChange={changeValue}>
+        selectedValue={selectedValue}
+        onValueChange={item => sendValue(item)}>
         {pickers}
       </Picker>
     </View>

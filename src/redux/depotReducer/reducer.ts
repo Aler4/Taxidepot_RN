@@ -1,4 +1,4 @@
-import {IState, TDriver, TCar, TStatus, TReducer} from './types';
+import {IState, TDriver, TCar, TStatus, TReducer} from '../types';
 import {
   UPDATE_CARS,
   UPDATE_LOADER,

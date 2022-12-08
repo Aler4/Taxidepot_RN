@@ -1,4 +1,4 @@
-import {TAddAction, TCar, TDriver, TStatus} from './types';
+import {TAddAction, TCar, TDriver, TStatus} from '../types';
 import {
   ADD_CAR,
   ADD_DRIVER,
@@ -45,6 +45,7 @@ function* getDrivers() {
         .then(res => res.json())
         .then(res => res.data),
     );
+    console.log(drivers)
     yield put(getDriverStatuses(statuses));
     yield put(uploadDrivers(drivers));
     yield put(updateLoad(false));
@@ -121,7 +122,7 @@ function* deleteDriver(arg: TAddAction) {
 function* updateDriverCard(arg: TAddAction) {
   try {
     console.log(arg.body)
-    yield call( () =>
+    yield call(() =>
       addToApi('driver', 'put', arg.body, arg.id).then(res => console.log(res)),
     );
     yield call(() => getDrivers());

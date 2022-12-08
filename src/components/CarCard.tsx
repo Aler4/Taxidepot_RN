@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
-import {TCar} from '../redux/depotReducer/types';
+import {TCar} from '../redux/types';
 import {CardRow} from './CardRow';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';

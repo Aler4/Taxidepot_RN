@@ -6,7 +6,7 @@ import {DateInput} from '../DateInput';
 import {TDate} from '../../helpers/formatDate';
 import {useDispatch} from 'react-redux';
 import {addDriver} from '../../redux/depotReducer/action';
-import {TDriver} from '../../redux/depotReducer/types';
+import {TDriver} from '../../redux/types';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -67,7 +67,7 @@ export const AddDriverModal: React.FC<TModalProps> = ({
       <View style={styles.status}>
         <StatusDropDown
           title={'Статус'}
-          init_value={'Активный'}
+          // init_value={'Активный'}
           labels={statuses}
           updateDate={getValue.bind(null, 'status')}
         />

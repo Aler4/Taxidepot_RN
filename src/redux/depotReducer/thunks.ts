@@ -1,6 +1,6 @@
 import {api} from '../../services/api';
 import {loadCars, updateLoad, uploadDrivers} from './action';
-import {TCar, TDriver} from './types';
+import {TCar, TDriver} from '../types';
 
 export const getDrivers = () => {
   return (

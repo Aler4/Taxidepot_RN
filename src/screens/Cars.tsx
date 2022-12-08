@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -12,10 +12,8 @@ import {
   carStatusSelector,
   loadSelector,
 } from '../redux/depotReducer/selector';
-import {CarCard} from '../components/CarCard';
 import {deleteCar, requestCars} from '../redux/depotReducer/action';
-import {AddCarModal} from '../components/ModalAdd/AddCarModal';
-import { LoadView } from "../components/LoadView";
+import {LoadView, CarCard, AddCarModal} from '../components';
 
 type TProps = {
   route: {params: {id: number}};

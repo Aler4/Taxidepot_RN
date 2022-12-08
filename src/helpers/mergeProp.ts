@@ -1,4 +1,4 @@
-import {TCar, TDriver} from '../redux/depotReducer/types';
+import {TCar, TDriver} from '../redux/types';
 
 type TProp = (cars: TCar[], drivers: TDriver[]) => TCar[] | [];
 

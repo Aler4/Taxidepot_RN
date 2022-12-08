@@ -1,4 +1,4 @@
-import {TCar, TDriver} from '../redux/depotReducer/types';
+import {TCar, TDriver} from '../redux/types';
 
 export const getApi = (derictory: string) => {
   if (!derictory) {
@@ -11,7 +11,9 @@ export const getApi = (derictory: string) => {
       'X-Authorization':
         'apibb4d351a27bd4fea213bb5e3fb7213a403bcb8622fd8e005df288dd19f46e57d',
     },
-  });
+  })
+    .then(response => response.json())
+    .then(response => response.data);
 };
 
 export const addToApi = (

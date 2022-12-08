@@ -1,11 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Text, View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
-import {ModalInput} from './ModalInput';
-import {StatusDropDown, TLabel} from '../StatusDropDown';
-import {TDate} from '../../helpers/formatDate';
+import {StatusDropDown, ModalInput, TLabel} from '../';
+import {TDate} from '../../helpers/';
 import {useDispatch} from 'react-redux';
-import {addCar, addDriver} from '../../redux/depotReducer/action';
-import {TCar} from '../../redux/depotReducer/types';
+import {addCar} from '../../redux/depotReducer/action';
+import {TCar} from '../../redux/types';
 
 type TModalProps = {
   statuses: TLabel[];

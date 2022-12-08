@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {TDriver} from '../redux/depotReducer/types';
+import {TDriver} from '../redux/types';
 import DropShadow from 'react-native-drop-shadow';
 import {CardRow} from './CardRow';
 import {formatDate, TDate} from '../helpers/formatDate';
@@ -82,7 +82,10 @@ export const DriverCard: React.FC<IDriverProps> = ({
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
-          <LinkBtn icon_name={'car'} route={() => nav.navigate('Cars', {id: driver.id})} />
+          <LinkBtn
+            icon_name={'car'}
+            route={() => nav.navigate('Cars', {id: driver.id})}
+          />
         </View>
       </View>
     </DropShadow>

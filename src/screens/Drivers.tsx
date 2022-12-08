@@ -12,33 +12,28 @@ import {
   driverStatusSelector,
   loadSelector,
 } from '../redux/depotReducer/selector';
-import {TDriver} from '../redux/depotReducer/types';
-import {DriverCard} from '../components/DriverCard';
+import {TDriver} from '../redux/types';
 import {
-  deleteDriver, requestCars,
+  deleteDriver,
+  requestCars,
   requestDrivers,
   updateDriver,
-} from "../redux/depotReducer/action";
-import {AddDriverModal} from '../components/ModalAdd/AddDriverModal';
-import { LoadView } from "../components/LoadView";
+} from '../redux/depotReducer/action';
+import {AddDriverModal, DriverCard, LoadView} from '../components';
 
 export const Drivers: React.FC<TDriver[]> = () => {
   const isLoad = useSelector(loadSelector);
   const drivers = useSelector(driversSelector);
   const statuses = useSelector(driverStatusSelector);
   let listItems = statuses.map(el => ({
-    label: el.title,
     value: el.title,
     code: el.code,
   }));
   const dispatch = useDispatch();
   const [modalState, setModalState] = useState<boolean>(false);
-  const showModal = useCallback(
-    (value: boolean) => {
-      setModalState(value);
-    },
-    [setModalState],
-  );
+  const showModal = useCallback((value: boolean) => {
+    setModalState(value);
+  }, []);
 
   const deleteCard = useCallback(
     (id: number) => {
@@ -60,7 +55,7 @@ export const Drivers: React.FC<TDriver[]> = () => {
   }, [dispatch]);
 
   if (isLoad) {
-    return <LoadView />
+    return <LoadView />;
   }
   return (
     <SafeAreaView style={styles.container}>
