@@ -84,7 +84,7 @@ export const DriverCard: React.FC<IDriverProps> = ({
           <DeleteBtn handler={deleteHandler} />
           <LinkBtn
             icon_name={'car'}
-            route={() => nav.navigate('Cars', {id: driver.id})}
+            route={() => nav.navigate('Personal', {id: driver.id})}
           />
         </View>
       </View>

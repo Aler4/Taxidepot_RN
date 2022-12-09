@@ -20,7 +20,7 @@ export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
+  const handleConfirm = date => {
     setDate(date);
     hideDatePicker();
   };
@@ -58,6 +58,8 @@ export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
+        minimumDate={new Date(1970, 0, 12)}
+        maximumDate={new Date(2004, 11, 30)}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

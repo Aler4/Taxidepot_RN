@@ -2,10 +2,7 @@ export type TAction = {
   type: string;
   data: TDriver[] | TCar[] | boolean | TStatus;
 };
-export type TCarReducer = (
-  state: ICarState,
-  action: TAction,
-) => ICarState;
+export type TCarReducer = (state: ICarState, action: TAction) => ICarState;
 export type TDriverReducer = (
   state: IDriverState,
   action: TAction,
@@ -64,4 +61,16 @@ export interface IDriverState {
   driversIsLoad: boolean;
   drivers: TDriver[] | [];
   driver_statuses: TStatus[] | [];
+}
+export interface IState {
+  drivers: {
+    driversIsLoad: boolean;
+    drivers: TDriver[] | [];
+    driver_statuses: TStatus[] | [];
+  };
+  cars: {
+    carsIsLoad: boolean;
+    cars: TCar[] | [];
+    car_statuses: TStatus[] | [];
+  };
 }

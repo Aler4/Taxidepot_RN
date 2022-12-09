@@ -1,5 +1,5 @@
-import {ICarState} from '../types';
+import {IState} from '../types';
 
-export const carsSelector = (state: ICarState) => state.cars;
-export const carLoadSelector = (state: ICarState) => state.carsIsLoad;
-export const carStatusSelector = (state: ICarState) => state.car_statuses;
+export const carsSelector = (state: IState) => state.cars.cars;
+export const carLoadSelector = (state: IState) => state.cars.carsIsLoad;
+export const carStatusSelector = (state: IState) => state.cars.car_statuses;

@@ -5,39 +5,47 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   carsSelector,
   carStatusSelector,
-  loadSelector,
-} from '../redux/depotReducer/selector';
-import {deleteCar, requestCars} from '../redux/depotReducer/action';
-import {LoadView, CarCard, AddCarModal} from '../components';
+  carLoadSelector,
+} from '../../redux/selectors';
+import {deleteCar, requestCars} from '../../redux/actions';
+import {LoadView, CarCard, AddCarModal} from '../../components';
 
 type TProps = {
   route: {params: {id: number}};
 };
 
-export const Cars: React.FC<TProps> = ({route}) => {
+export const PersonalCars: React.FC<TProps> = ({route}) => {
   const dispatch = useDispatch();
   let data = route.params;
   let [id, setId] = useState<number>(0);
-  let cars = useSelector(carsSelector)
-  const isLoad = useSelector(loadSelector);
+  let cars = useSelector(carsSelector);
+  const carsIsLoad = useSelector(carLoadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
-    label: el.title,
     value: el.title,
     code: el.code,
   }));
   const [modalState, setModalState] = useState<boolean>(false);
-  const deleteCard = useCallback(
-    (id: number) => {
-      dispatch(deleteCar(id));
-    },
-    [dispatch, cars],
-  );
+
+  const deleteCard = useCallback((id: number) => {
+    return Alert.alert('Delete', 'Do you want delete this car?', [
+      {
+        text: 'CANCEL',
+        onPress: () => null,
+      },
+      {
+        text: 'DELETE',
+        onPress: () => dispatch(deleteCar(id)),
+      },
+    ]);
+  }, []);
+
   const showModal = useCallback(
     (value: boolean) => {
       setModalState(value);
@@ -49,7 +57,7 @@ export const Cars: React.FC<TProps> = ({route}) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (data && data.id){
+    if (data && data.id) {
       return setId(data.id);
     }
   }, [cars, data, id]);
@@ -59,10 +67,10 @@ export const Cars: React.FC<TProps> = ({route}) => {
     return car;
   }, [cars, id]);
 
-  if (isLoad) {
-    return <LoadView />
+  if (carsIsLoad) {
+    return <LoadView />;
   }
-  return  (
+  return (
     <SafeAreaView style={styles.container}>
       <FlatList
         contentContainerStyle={styles.list}

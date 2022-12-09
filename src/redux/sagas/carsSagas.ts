@@ -1,4 +1,4 @@
-import { TAddAction, TCar, TDriver, TStatus } from "../types";
+import {TAddAction, TCar, TDriver, TStatus} from '../types';
 import {
   ADD_CAR,
   DELETE_CAR,
@@ -20,17 +20,9 @@ export function* watchCars() {
 function* getCars() {
   try {
     yield put(updateCarsLoad(true));
-    const cars: TCar[] = yield call(() =>
-      getApi('car')
-        .then(response => response.json())
-        .then(response => response.data),
-    );
-    const statuses: TStatus[] = yield call(() =>
-      getApi('car-status')
-    );
-    const drivers: TDriver[] = yield call(() =>
-      getApi('driver')
-    );
+    const cars: TCar[] = yield call(() => getApi('car'));
+    const statuses: TStatus[] = yield call(() => getApi('car-status'));
+    const drivers: TDriver[] = yield call(() => getApi('driver'));
 
     yield put(getCarStatuses(statuses));
     yield put(loadCars(mergeProp(cars, drivers)));
@@ -52,7 +44,6 @@ function* deleteCar(arg: TAddAction) {
   try {
     yield call(() => deleteFromApi('car', arg.id));
     yield getCars();
-
   } catch (e) {
     console.log(e);
   }

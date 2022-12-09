@@ -5,24 +5,25 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   driversSelector,
   driverStatusSelector,
-  loadSelector,
-} from '../redux/depotReducer/selector';
-import {TDriver} from '../redux/types';
+  driversLoadSelector,
+} from '../../redux/selectors';
+import {TDriver} from '../../redux/types';
 import {
   deleteDriver,
   requestCars,
   requestDrivers,
   updateDriver,
-} from '../redux/depotReducer/action';
-import {AddDriverModal, DriverCard, LoadView} from '../components';
+} from '../../redux/depotReducer/action';
+import {AddDriverModal, DriverCard, LoadView} from '../../components';
 
 export const Drivers: React.FC<TDriver[]> = () => {
-  const isLoad = useSelector(loadSelector);
+  const driversIsLoad = useSelector(driversLoadSelector);
   const drivers = useSelector(driversSelector);
   const statuses = useSelector(driverStatusSelector);
   let listItems = statuses.map(el => ({
@@ -35,12 +36,19 @@ export const Drivers: React.FC<TDriver[]> = () => {
     setModalState(value);
   }, []);
 
-  const deleteCard = useCallback(
-    (id: number) => {
-      dispatch(deleteDriver(id));
-    },
-    [dispatch, drivers],
-  );
+  const deleteCard = useCallback((id: number) => {
+    return Alert.alert('Delete', 'Do you want delete this car?', [
+      {
+        text: 'CANCEL',
+        onPress: () => null,
+      },
+      {
+        text: 'DELETE',
+        onPress: () => dispatch(deleteDriver(id)),
+        style: 'destructive',
+      },
+    ]);
+  }, []);
   const updateCard = useCallback(
     (data: TDriver, id: number) => {
       delete data.id;
@@ -54,7 +62,7 @@ export const Drivers: React.FC<TDriver[]> = () => {
     dispatch(requestCars());
   }, [dispatch]);
 
-  if (isLoad) {
+  if (driversIsLoad) {
     return <LoadView />;
   }
   return (

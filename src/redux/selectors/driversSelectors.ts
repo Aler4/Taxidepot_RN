@@ -1,6 +1,6 @@
-import {IDriverState} from '../types';
+import { IDriverState, IState } from "../types";
 
-export const driversSelector = (state: IDriverState) => state.drivers;
-export const driverStatusSelector = (state: IDriverState) => state.driver_statuses;
+export const driversSelector = (state: IState) => state.drivers.drivers;
+export const driverStatusSelector = (state: IState) => state.drivers.driver_statuses;
 
-export const driversLoadSelector = (state: IDriverState) => state.driversIsLoad;
+export const driversLoadSelector = (state: IState) => state.drivers.driversIsLoad;
