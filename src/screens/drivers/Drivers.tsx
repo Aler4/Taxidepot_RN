@@ -20,7 +20,7 @@ import {
   requestDrivers,
   updateDriver,
 } from '../../redux/depotReducer/action';
-import {AddDriverModal, DriverCard, LoadView} from '../../components';
+import { AddDriverModal, DriverCard, LoadView, ModalBtn } from "../../components";
 
 export const Drivers: React.FC<TDriver[]> = () => {
   const driversIsLoad = useSelector(driversLoadSelector);
@@ -80,11 +80,10 @@ export const Drivers: React.FC<TDriver[]> = () => {
           />
         )}
       />
-      <TouchableOpacity
-        style={styles.addBtn}
-        onPress={() => setModalState(!modalState)}>
-        <Text style={styles.addBtnText}>Add driver</Text>
-      </TouchableOpacity>
+      <ModalBtn
+        title={'Додати водія'}
+        hendler={() => setModalState(!modalState)}
+      />
       <AddDriverModal
         statuses={listItems}
         visible={modalState}
@@ -99,6 +98,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#F7F7F7',
+
   },
   list: {
     justifyContent: 'center',

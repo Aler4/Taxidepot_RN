@@ -14,17 +14,17 @@ import {
   carLoadSelector,
 } from '../../redux/selectors';
 import {deleteCar, requestCars} from '../../redux/actions';
-import {LoadView, CarCard, AddCarModal} from '../../components';
+import { LoadView, CarCard, AddCarModal, ModalBtn } from "../../components";
+import {TCar} from '../../redux/types';
 
 type TProps = {
-  route: {params: {id: number}};
+  route: {params: {id?: number; items: TCar[]}};
 };
 
 export const PersonalCars: React.FC<TProps> = ({route}) => {
   const dispatch = useDispatch();
   let data = route.params;
   let [id, setId] = useState<number>(0);
-  let cars = useSelector(carsSelector);
   const carsIsLoad = useSelector(carLoadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
@@ -52,20 +52,17 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
     },
     [setModalState],
   );
-  useEffect(() => {
-    dispatch(requestCars());
-  }, [dispatch]);
 
   useEffect(() => {
     if (data && data.id) {
       return setId(data.id);
     }
-  }, [cars, data, id]);
+  }, [data.items, data, id]);
 
   const cards = useMemo(() => {
-    let car = id !== 0 ? cars.filter(el => el.driver_id === id) : cars;
+    let car = id !== 0 ? data.items.filter(el => el.driver_id === id) : data.items;
     return car;
-  }, [cars, id]);
+  }, [data.items, id]);
 
   if (carsIsLoad) {
     return <LoadView />;
@@ -81,11 +78,10 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
         )}
       />
 
-      <TouchableOpacity
-        style={styles.addBtn}
-        onPress={() => setModalState(!modalState)}>
-        <Text style={styles.addBtnText}>Add Car</Text>
-      </TouchableOpacity>
+      <ModalBtn
+        title={'Додати авто'}
+        hendler={() => setModalState(!modalState)}
+      />
       <AddCarModal
         statuses={listItems}
         visible={modalState}
@@ -100,6 +96,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#F7F7F7',
   },
   list: {
     justifyContent: 'center',

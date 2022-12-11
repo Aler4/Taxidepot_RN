@@ -1,4 +1,4 @@
-export {AddCarModal, AddDriverModal, ModalInput} from './modalAdd';
+export {AddCarModal, AddDriverModal, ModalInput, ModalBtn} from './modalAdd';
 export {CarCard} from './CarCard';
 export {DriverCard} from './DriverCard';
 export {CardRow} from './CardRow';

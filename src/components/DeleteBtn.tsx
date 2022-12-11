@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 type TProps = {
   handler: () => void;
@@ -9,18 +8,24 @@ type TProps = {
 export const DeleteBtn: React.FC<TProps> = ({handler}) => {
   return (
     <TouchableOpacity style={styles.deleteBtn} onPress={handler}>
-      <Icon name="delete" color={'#a50606'} size={25} />
+      <Text style={styles.deleteBtnText}>Видалити</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   deleteBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 5,
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#efa2a2',
+    backgroundColor: '#FDEBEB',
+  },
+  deleteBtnText: {
+    fontFamily: 'gilroy',
+    color: '#F00404',
+    fontWeight: '500',
+
   },
 });

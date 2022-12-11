@@ -1,6 +1,6 @@
-import React, {useMemo, useState } from "react";
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import { Picker } from "@react-native-picker/picker";
+import {Picker} from '@react-native-picker/picker';
 
 export type TLabel = {
   value: string;
@@ -13,25 +13,35 @@ type TStatusProps = {
   title: string;
   updateDate?: (data: {title: string; code: string}) => void;
   updateCard?: (data: {title: string; code: string}) => void;
-
+  formik?: any;
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
   console.log(props.init_value);
   const [selectedValue, setSelectedValue] = useState(props.init_value);
-  console.log(selectedValue)
+  console.log(selectedValue);
   const [items, setItems] = useState(props.labels);
+  const [title, setTitle] = useState(props.title.toUpperCase());
 
   const sendValue = (val: string) => {
-    setSelectedValue(val)
+    setSelectedValue(val);
     let item = items.filter(el => el.code === val)[0];
     if (props.updateDate) {
       props.updateDate({title: item.value, code: item.code});
     }
+
     if (props.updateCard) {
       props.updateCard({title: item.value, code: item.code});
     }
+
+    if (props.formik) {
+      props.formik.setFieldValue('status', {
+        title: item.value,
+        code: item.code,
+      });
+    }
   };
+
   const pickers = useMemo(() => {
     if (props.init_value) {
       let index: number = items.findIndex(el => el.value == props.init_value);
@@ -42,15 +52,17 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
     ));
   }, [items, props.init_value]);
 
-  console.log(pickers)
   return (
     <View style={styles.row}>
-      <Text>{`${props.title}: `}</Text>
+      <Text style={styles.title}>{title}</Text>
       <Picker
+        dropdownIconColor={'#FFFFFF'}
         style={styles.input}
         prompt={'Status'}
         mode={'dialog'}
-        selectedValue={selectedValue}
+        selectedValue={
+          props.formik ? props.formik.values.status : selectedValue
+        }
         onValueChange={item => sendValue(item)}>
         {pickers}
       </Picker>
@@ -59,6 +71,9 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
 };
 const styles = StyleSheet.create({
   input: {
+    fontFamily: 'gilroy',
+    fontSize: 16,
+    fontWeight: '500',
     borderWidth: 0,
     width: 200,
     lineHeight: 1,
@@ -73,9 +88,19 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#EEEEEE',
+    paddingHorizontal: 15,
   },
   listContainer: {
     width: 200,
     borderWidth: 0,
+  },
+  title: {
+    fontFamily: 'gilroy',
+    paddingRight: 10,
+    color: '#292D45',
+    fontSize: 14,
+    // opacity: 0.9,
   },
 });

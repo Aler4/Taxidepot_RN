@@ -1,27 +1,33 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 interface ILinkProps {
-  icon_name: string;
+  title: string;
   route: () => void;
 }
 
 export const LinkBtn: React.FC<ILinkProps> = (props) => {
   return (
     <TouchableOpacity style={styles.linkBtn} onPress={props.route}>
-      <Icon name={props.icon_name} color={'black'} size={25} />
+      <Text style={styles.linkBtnText}>{props.title}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   linkBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 5,
+    width: 83,
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#777171',
+    backgroundColor: '#737DF9',
   },
+  linkBtnText: {
+    fontFamily: 'gilroy',
+    fontWeight: '500',
+    color: '#FFFFFF',
+  }
 });

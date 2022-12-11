@@ -15,6 +15,7 @@ interface RowProps {
 
 export const CardRow: React.FC<RowProps> = props => {
   let initValue = typeof props.info === 'number' ? props.info.toString() : props.info;
+  const [title, setTitle] = useState(props.title.toUpperCase())
   const [value, setValue] = useState(initValue);
   const [isEdit, setIsEdit] = useState(false);
   const editable = useEditing(isEdit, setIsEdit);
@@ -41,7 +42,7 @@ export const CardRow: React.FC<RowProps> = props => {
 
   return (
     <Pressable onLongPress={() => startHandler()} style={styles.row}>
-      <Text style={styles.title}>{props.title}</Text>
+      <Text style={styles.title}>{title}</Text>
       <TextInput
         style={isEdit ? [styles.input, styles.inpAct] : styles.input}
         value={value}
@@ -56,15 +57,21 @@ export const CardRow: React.FC<RowProps> = props => {
 };
 const styles = StyleSheet.create({
   row: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: 'row',
     marginBottom: 10,
     alignItems: 'center',
     opacity: 1,
+    borderBottomWidth: 1,
+    borderColor: '#EEEEEE',
   },
   title: {
     fontFamily: 'gilroy',
-
-    opacity: 0.8,
+    paddingRight: 10,
+    color: '#292D45',
+    fontSize: 14,
+    opacity: 0.9,
   },
   info: {
     fontFamily: 'gilroy',
@@ -76,17 +83,20 @@ const styles = StyleSheet.create({
     display: 'none',
   },
   input: {
-    color: 'black',
+    color: '#292D45',
     backgroundColor: 'none',
     lineHeight: 1,
     overflow: 'visible',
-    height: 30,
+    height: 25,
+    fontSize: 16,
+    fontWeight: '500',
     paddingTop: 12,
     paddingBottom: 0,
     textAlignVertical: 'center',
+
   },
   inpAct: {
-    fontWeight: '700',
+    fontWeight: '500',
     borderBottomWidth: 1,
   },
 });

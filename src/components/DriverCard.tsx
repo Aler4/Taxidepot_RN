@@ -3,11 +3,10 @@ import {StyleSheet, View} from 'react-native';
 import {TDriver} from '../redux/types';
 import DropShadow from 'react-native-drop-shadow';
 import {CardRow} from './CardRow';
-import {formatDate, TDate} from '../helpers/formatDate';
+import {formatDate, TDate, makeCompare} from '../helpers';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
-import {makeCompare} from '../helpers/compareData';
 import {useNavigation} from '@react-navigation/native';
 
 interface IDriverProps {
@@ -76,15 +75,15 @@ export const DriverCard: React.FC<IDriverProps> = ({
         <StatusDropDown
           init_value={driver.status.title}
           labels={status_list}
-          title={'Статус'}
+          title={'Статус: '}
           updateCard={updateCardData.bind(null, 'status')}
         />
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
           <LinkBtn
-            icon_name={'car'}
-            route={() => nav.navigate('Personal', {id: driver.id})}
+            title={'Авто'}
+            route={() => nav.navigate('Cars', {screen: 'Personal', params: {id: driver.id} })}
           />
         </View>
       </View>
@@ -93,23 +92,24 @@ export const DriverCard: React.FC<IDriverProps> = ({
 };
 const styles = StyleSheet.create({
   card: {
-    padding: 10,
     backgroundColor: '#fff',
     marginVertical: 15,
     width: 340,
     marginHorizontal: 15,
+    borderRadius: 8,
+    paddingTop: 5,
   },
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
-      width: 3,
-      height: 5,
+      width: 0,
+      height: 0,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowRadius: 2,
   },
   actionContainer: {
-    paddingTop: 15,
+    paddingVertical: 15,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

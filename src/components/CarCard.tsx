@@ -35,15 +35,11 @@ export const CarCard: React.FC<CarProps> = ({
         <CardRow title={'Модель: '} info={cardData.model} />
         <CardRow title={'Номер: '} info={cardData.number} />
         <CardRow title={'Рік: '} info={cardData.year.toString()} length={4} />
-        <StatusDropDown
-          init_value={car.status.title}
-          labels={status_list}
-          title={'Статус'}
-        />
+        <CardRow title={'Статус: '} info={car.status.title} />
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
-          <LinkBtn icon_name={'account'} route={() => console.log('sad')} />
+          <LinkBtn title={'Водій'} route={() => console.log('sad')} />
         </View>
       </View>
     </DropShadow>
@@ -51,23 +47,24 @@ export const CarCard: React.FC<CarProps> = ({
 };
 const styles = StyleSheet.create({
   card: {
-    padding: 10,
+    paddingTop: 5,
     backgroundColor: '#fff',
     marginVertical: 15,
     width: 340,
     marginHorizontal: 15,
+    borderRadius: 8,
   },
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
-      width: 3,
-      height: 5,
+      width: 0,
+      height: 0,
     },
     shadowOpacity: 0.5,
-    shadowRadius: 4,
+    shadowRadius: 2,
   },
   actionContainer: {
-    paddingTop: 15,
+    paddingVertical: 15,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

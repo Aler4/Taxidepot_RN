@@ -50,7 +50,6 @@ function* updateDriverCard(arg: TAddAction) {
   try {
     console.log(arg.body);
     yield call(() => addToApi('driver', 'put', arg.body, arg.id));
-    yield call(() => getDrivers());
   } catch (e) {
     console.log(e);
   }

@@ -6,11 +6,22 @@ import {formatDate, TDate} from '../helpers/formatDate';
 type TDateProps = {
   title: string;
   dataUpdate: (data: TDate) => void;
+  field: any,
+  form: any,
+
 };
 
-export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
-  const [date, setDate] = useState<TDate>('');
+export const DateInput: React.FC<TDateProps> = (props) => {
+
+  const {
+    field: {name, onBlur, onChange, value},
+    form: {errors, touched, setFieldTouched},
+    ...inputProps
+  } = props;
+
+  const [date, setDate] = useState<TDate>(value);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -45,13 +56,17 @@ export const DateInput: React.FC<TDateProps> = ({title, dataUpdate}) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{props.title}</Text>
         <TextInput
           style={styles.textInput}
-          value={getDate()}
-          placeholder="Date..."
+          value={value}
+          onChangeText={() => onChange(name)(formatDate(date))}
+          onBlur={() => {
+            setFieldTouched(name);
+            onBlur(name);
+          }}
+          {...inputProps}
           onPressIn={showDatePicker}
-          onContentSizeChange={() => dataUpdate(formatDate(date))}
         />
       </View>
 
