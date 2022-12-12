@@ -33,7 +33,10 @@ function* getCars() {
 }
 function* addCar(arg: TAddAction) {
   try {
-    yield call(() => addToApi('car', 'post', arg.body));
+    if (arg.body) {
+      (arg.body as TCar).year = +(arg.body as TCar).year;
+    }
+    yield call(() => addToApi('car', 'post', arg.body).then(res => console.log(res)));
     yield getCars();
   } catch (e) {
     console.log(e);

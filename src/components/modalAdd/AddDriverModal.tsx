@@ -7,6 +7,7 @@ import {TDate} from '../../helpers/formatDate';
 import {useDispatch} from 'react-redux';
 import {addDriver} from '../../redux/depotReducer/action';
 import {TDriver} from '../../redux/types';
+import {Field, Formik} from 'formik';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -44,43 +45,50 @@ export const AddDriverModal: React.FC<TModalProps> = ({
     [driver, setDriver],
   );
 
-  const addHandler = () => {
-    console.log(driver);
-    dispath(addDriver(driver));
+  const addHandler = value => {
+    dispath(addDriver(value));
     changeVisible(!visible);
   };
 
   return (
     <Modal visible={isVisible} style={styles.container}>
-      <ModalInput
-        title={"Ім'я"}
-        updateData={getValue.bind(null, 'first_name')}
-      />
-      <ModalInput
-        title={'Прізвище'}
-        updateData={getValue.bind(null, 'last_name')}
-      />
-      <DateInput
-        title={'Дата народженя'}
-        dataUpdate={getValue.bind(null, 'date_birth')}
-      />
-      <View style={styles.status}>
-        <StatusDropDown
-          title={'Статус'}
-          // init_value={'Активный'}
-          labels={statuses}
-          updateDate={getValue.bind(null, 'status')}
-        />
-      </View>
+      <Formik
+        initialValues={{
+          first_name: '',
+          last_name: '',
+          date_birth: 0,
+          status: {title: 'Активный', code: 'active'},
+        }}
+        onSubmit={(values: TDriver) => addHandler(values)}>
+        {formik => (
+          <>
+            <Field component={ModalInput} name="first_name" title={"Ім'я"} />
+            <Field component={ModalInput} name="last_name" title={'Прізвище'} />
+            <Field
+              component={DateInput}
+              formik={formik}
+              title={'Дата народженя'}
+            />
 
-      <View style={styles.btnsContainer}>
-        <TouchableOpacity onPress={() => changeVisible(!visible)}>
-          <Text>Cancel</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={addHandler}>
-          <Text>Accepted</Text>
-        </TouchableOpacity>
-      </View>
+            <Field
+              component={StatusDropDown}
+              formik={formik}
+              init_value={'Активный'}
+              labels={statuses}
+              title={'Статус'}
+              name="status"
+            />
+            <View style={styles.btnsContainer}>
+              <TouchableOpacity onPress={() => changeVisible(!visible)}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={formik.handleSubmit}>
+                <Text>Accepted</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+      </Formik>
     </Modal>
   );
 };

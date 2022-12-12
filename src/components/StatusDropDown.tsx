@@ -60,9 +60,7 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
         style={styles.input}
         prompt={'Status'}
         mode={'dialog'}
-        selectedValue={
-          props.formik ? props.formik.values.status : selectedValue
-        }
+        selectedValue={selectedValue}
         onValueChange={item => sendValue(item)}>
         {pickers}
       </Picker>

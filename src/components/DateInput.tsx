@@ -5,28 +5,17 @@ import {formatDate, TDate} from '../helpers/formatDate';
 
 type TDateProps = {
   title: string;
-  dataUpdate: (data: TDate) => void;
-  field: any,
-  form: any,
-
+  // dataUpdate: (data: TDate) => void;
+  formik: any;
 };
 
-export const DateInput: React.FC<TDateProps> = (props) => {
-
-  const {
-    field: {name, onBlur, onChange, value},
-    form: {errors, touched, setFieldTouched},
-    ...inputProps
-  } = props;
-
-  const [date, setDate] = useState<TDate>(value);
+export const DateInput: React.FC<TDateProps> = ({title, formik}) => {
+  const [date, setDate] = useState<string>('');
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
-
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
@@ -50,23 +39,22 @@ export const DateInput: React.FC<TDateProps> = (props) => {
       let year: number = (date as unknown as Date).getFullYear();
       res = `${day}.${month}.${year}`;
     }
+    console.log(formatDate(date));
+    console.log(date);
     return res;
   };
 
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>{props.title}</Text>
+        <Text>{title}</Text>
         <TextInput
           style={styles.textInput}
-          value={value}
-          onChangeText={() => onChange(name)(formatDate(date))}
-          onBlur={() => {
-            setFieldTouched(name);
-            onBlur(name);
-          }}
-          {...inputProps}
+          value={getDate()}
           onPressIn={showDatePicker}
+          onContentSizeChange={() =>
+            formik.setFieldValue('date_birth', +(formatDate(date) as Date))
+          }
         />
       </View>
 
@@ -84,16 +72,12 @@ export const DateInput: React.FC<TDateProps> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 50,
-    paddingVertical: 15,
+    padding: 50,
   },
   textInput: {
     borderWidth: 1,
     borderColor: 'black',
     marginBottom: 5,
     padding: 10,
-  },
-  title: {
-    marginBottom: 10,
   },
 });

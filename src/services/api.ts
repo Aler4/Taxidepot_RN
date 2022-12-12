@@ -25,14 +25,14 @@ export const addToApi = (
   if (!derictory || !method) {
     throw Error('not enough arguments');
   }
+  console.log(body)
+
   let url = `https://edu.evgeniychvertkov.com/v1/${derictory}/`;
   method = method.toUpperCase();
 
   if (method === 'PUT' && id) {
     url = `https://edu.evgeniychvertkov.com/v1/${derictory}/${id}/`;
   }
-  console.log(body)
-  console.log(method)
   return fetch(url, {
     method: `${method}`,
     headers: {

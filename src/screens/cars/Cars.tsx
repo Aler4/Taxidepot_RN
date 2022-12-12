@@ -25,6 +25,7 @@ export const Cars: React.FC<TProps> = ({route}) => {
   let data = route.params;
   const dispatch = useDispatch();
   let [id, setId] = useState<number>(0);
+  const [items, setItems] = useState(data.items);
   const carsIsLoad = useSelector(carLoadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
@@ -57,6 +58,7 @@ export const Cars: React.FC<TProps> = ({route}) => {
     if (data && data.id) {
       return setId(data.id);
     }
+    setItems(data.items);
   }, [data.items, data, id]);
 
   if (carsIsLoad) {
@@ -67,7 +69,7 @@ export const Cars: React.FC<TProps> = ({route}) => {
       <FlatList
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={data.items}
+        data={items}
         renderItem={({item}) => (
           <CarCard car={item} status_list={listItems} delCard={deleteCard} />
         )}
@@ -76,11 +78,6 @@ export const Cars: React.FC<TProps> = ({route}) => {
         title={'Додати авто'}
         hendler={() => setModalState(!modalState)}
       />
-      {/*<TouchableOpacity*/}
-      {/*  style={styles.addBtn}*/}
-      {/*  onPress={() => setModalState(!modalState)}>*/}
-      {/*  <Text style={styles.addBtnText}>Add Car</Text>*/}
-      {/*</TouchableOpacity>*/}
       <AddCarModal
         statuses={listItems}
         visible={modalState}
