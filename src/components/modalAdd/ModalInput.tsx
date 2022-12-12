@@ -1,8 +1,9 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 type TInputProps = {
   title: string;
+  focus?: boolean;
   updateData?: (data: string | number) => void;
   field?: any;
   form?: any;
@@ -18,8 +19,8 @@ export const ModalInput: React.FC<TInputProps> = props => {
   const hasError = errors[name] && touched[name];
 
   return (
-    <>
-      <Text>{props.title}</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>{props.title}</Text>
       <TextInput
         style={[styles.textInput, hasError && styles.errorInput]}
         value={value}
@@ -31,23 +32,30 @@ export const ModalInput: React.FC<TInputProps> = props => {
         {...inputProps}
       />
       {hasError && <Text style={styles.errorText}>{errors[name]}</Text>}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 50,
+    marginBottom: 15,
+    height: 'auto',
+  },
   textInput: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderRadius: 8,
+    borderColor: '#C5C6CE',
     marginBottom: 5,
     padding: 10,
   },
-  container: {
-    paddingHorizontal: 50,
-    paddingVertical: 15,
-  },
   title: {
-    marginBottom: 10,
+    paddingBottom: 5,
+    fontFamily: 'gilroy',
+    fontSize: 14,
+    color: '#292D45',
+    fontWeight: '500',
   },
   errorText: {
     fontSize: 10,

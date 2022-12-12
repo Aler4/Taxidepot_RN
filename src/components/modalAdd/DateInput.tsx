@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, Text} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {formatDate, TDate} from '../helpers/formatDate';
+import {formatDate} from '../../helpers';
 
 type TDateProps = {
   title: string;
-  // dataUpdate: (data: TDate) => void;
   formik: any;
+  field: any;
+  form: any;
 };
 
 export const DateInput: React.FC<TDateProps> = ({title, formik}) => {
@@ -20,10 +21,12 @@ export const DateInput: React.FC<TDateProps> = ({title, formik}) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = date => {
+  const handleConfirm = (date) => {
     setDate(date);
     hideDatePicker();
   };
+
+  const hasError = formik.errors['date_birth'] && formik.touched['date_birth'];
 
   const getDate = () => {
     let res: string = '';
@@ -47,15 +50,16 @@ export const DateInput: React.FC<TDateProps> = ({title, formik}) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text>{title}</Text>
+        <Text style={styles.title}>{title}</Text>
         <TextInput
-          style={styles.textInput}
+          style={[styles.textInput, hasError && styles.errorInput]}
           value={getDate()}
           onPressIn={showDatePicker}
           onContentSizeChange={() =>
             formik.setFieldValue('date_birth', +(formatDate(date) as Date))
           }
         />
+        {hasError && <Text style={styles.errorText}>{formik.errors['\'date_birth\'']}</Text>}
       </View>
 
       <DateTimePickerModal
@@ -72,12 +76,28 @@ export const DateInput: React.FC<TDateProps> = ({title, formik}) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 50,
+    paddingHorizontal: 50,
+    marginBottom: 15,
   },
   textInput: {
     borderWidth: 1,
-    borderColor: 'black',
+    borderRadius: 8,
+    borderColor: '#C5C6CE',
     marginBottom: 5,
     padding: 10,
+  },
+  title: {
+    paddingBottom: 5,
+    fontFamily: 'gilroy',
+    fontSize: 14,
+    color: '#292D45',
+    fontWeight: '500',
+  },
+  errorText: {
+    fontSize: 10,
+    color: 'red',
+  },
+  errorInput: {
+    borderColor: 'red',
   },
 });

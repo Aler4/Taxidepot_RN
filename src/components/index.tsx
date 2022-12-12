@@ -1,8 +1,8 @@
-export {AddCarModal, AddDriverModal, ModalInput, ModalBtn} from './modalAdd';
+export {AddCarModal, AddDriverModal, ModalInput, ModalBtn, OpenModalBtn} from './modalAdd';
 export {CarCard} from './CarCard';
 export {DriverCard} from './DriverCard';
 export {CardRow} from './CardRow';
-export {DateInput} from './DateInput';
+export {DateInput} from './modalAdd/DateInput';
 export {DeleteBtn} from './DeleteBtn';
 export {LinkBtn} from './LinkBtn';
 export {LoadView} from './LoadView';

@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
-import {StatusDropDown, ModalInput, TLabel} from '../';
+import React, { useEffect, useState} from 'react';
+import {View, Modal, StyleSheet, SafeAreaView} from 'react-native';
+import {StatusDropDown, ModalInput, TLabel, ModalBtn} from '../';
 import {useDispatch} from 'react-redux';
 import {addCar} from '../../redux/depotReducer/action';
 import {TCar} from '../../redux/types';
 import {Formik, Field} from 'formik';
-import { getCars } from "../../redux/depotReducer/thunks";
 import { requestCars } from "../../redux/actions";
 
 type TModalProps = {
@@ -34,53 +33,52 @@ export const AddCarModal: React.FC<TModalProps> = ({
   };
 
   return (
-    <Modal visible={isVisible} style={styles.container}>
-      <Formik
-        initialValues={{
-          model: '',
-          mark: '',
-          year: 2007,
-          number: '',
-          driver_id: 0,
-          status: {
-            title: '',
-            code: '',
-          },
-        }}
-        onSubmit={values => addHandler(values)}>
-        {formik => (
-          <>
-            <Field component={ModalInput} name="mark" title={'Марка'} />
-            <Field component={ModalInput} name="model" title={'Модель'} />
-            <Field
-              component={ModalInput}
-              name="year"
-              title={'Рік'}
-              keyboardType="numeric"
-            />
-            <Field component={ModalInput} title={'Номер авто'} name="number" />
+    <Modal visible={isVisible} >
+      <SafeAreaView style={styles.container}>
+        <Formik
+          initialValues={{
+            model: '',
+            mark: '',
+            year: 2007,
+            number: '',
+            driver_id: 0,
+            status: {
+              title: '',
+              code: '',
+            },
+          }}
+          onSubmit={values => addHandler(values)}>
+          {formik => (
+            <>
+              <Field component={ModalInput} name="mark" title={'Марка'} />
+              <Field component={ModalInput} name="model" title={'Модель'} />
+              <Field
+                component={ModalInput}
+                name="year"
+                title={'Рік'}
+                keyboardType="numeric"
+              />
+              <Field component={ModalInput} title={'Номер авто'} name="number" />
 
-            <Field component={ModalInput} title={'Ід водія'} name="driver_id" />
+              <Field component={ModalInput} title={'Ід водія'} name="driver_id" />
 
-            <Field
-              component={StatusDropDown}
-              formik={formik}
-              init_value={'Стандарт'}
-              labels={statuses}
-              title={'Статус'}
-              name="status"
-            />
-            <View style={styles.btnsContainer}>
-              <TouchableOpacity onPress={() => changeVisible(!visible)}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={formik.handleSubmit}>
-                <Text>Accepted</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </Formik>
+              <Field
+                component={StatusDropDown}
+                formik={formik}
+                init_value={'Стандарт'}
+                labels={statuses}
+                title={'Статус'}
+                name="status"
+              />
+              <View style={styles.btnsContainer}>
+                <ModalBtn  role={'dismiss'} title={'Назад'} handler={() => changeVisible(!visible)} />
+                <ModalBtn valid={formik.isValid} role={'add'} title={'Додати'} handler={formik.handleSubmit} />
+
+              </View>
+            </>
+          )}
+        </Formik>
+      </SafeAreaView>
     </Modal>
   );
 };
@@ -88,9 +86,8 @@ export const AddCarModal: React.FC<TModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 50,
+    paddingTop: 30,
+    paddingBottom: 30,
   },
   status: {
     paddingLeft: 120,

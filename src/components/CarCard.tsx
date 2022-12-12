@@ -6,6 +6,7 @@ import {CardRow} from './CardRow';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
+import { useNavigation } from "@react-navigation/native";
 
 interface CarProps {
   car: TCar;
@@ -18,6 +19,7 @@ export const CarCard: React.FC<CarProps> = ({
   status_list,
   delCard,
 }) => {
+  const nav = useNavigation()
   const [cardData, setCardData] = useState(car);
   useEffect(() => {
     setCardData(car)
@@ -39,7 +41,10 @@ export const CarCard: React.FC<CarProps> = ({
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
-          <LinkBtn title={'Водій'} route={() => console.log('sad')} />
+          <LinkBtn title={'Водій'} route={() => nav.navigate('Drivers', {
+                screen: 'Owner',
+                params: {id: cardData.driver_id},
+          })} />
         </View>
       </View>
     </DropShadow>

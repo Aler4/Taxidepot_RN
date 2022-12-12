@@ -1,35 +1,76 @@
-import React from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
-interface IProps {
+type TModalBtn = {
+  handler: () => void;
   title: string;
-  hendler: () => void;
-}
+  role: string;
+  valid?: boolean;
+};
 
-export const ModalBtn: React.FC<IProps> = props => {
+export const ModalBtn: React.FC<TModalBtn> = props => {
+  const [isValid, setIsValid] = useState(props.valid);
+
+  useEffect(() => {
+    console.log(`${props.role}: ${isValid}`);
+    setIsValid(props.valid);
+  }, [props.valid]);
+
+  const getStyleBtn = useMemo(() => {
+    let style = null;
+    if (props.role == 'add') {
+      if (isValid) {
+        style = [styles.acceptBtn, {opacity: 1}];
+      } else {
+        style = [styles.acceptBtn, {opacity: 0.5}];
+      }
+    }
+
+    if (props.role == 'dismiss') {
+      style = styles.dismissBtn;
+    }
+    return style;
+  }, [props.role, isValid]);
   return (
-    <TouchableOpacity style={styles.addBtn} onPress={props.hendler}>
-      <Icon name={'add'} color={'#8E91A0'} size={32} />
-      <Text style={styles.addBtnText}> {props.title} </Text>
+    <TouchableOpacity
+      style={getStyleBtn}
+      onPress={props.handler}
+      disabled={props.role == 'add' ? !isValid : false}>
+      <Text
+        style={
+          props.role == 'add' ? styles.acceptBtnText : styles.dismissBtnText
+        }>
+        {props.title}
+      </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  addBtn: {
-    width: '100%',
+  acceptBtn: {
+    backgroundColor: '#737DF9',
     height: 40,
-    flexDirection: 'row',
-    backgroundColor: '#F4F5FF',
-    alignItems: 'center',
+    width: 80,
+    borderRadius: 8,
     justifyContent: 'center',
-    marginBottom: 5,
+    alignItems: 'center',
   },
-  addBtnText: {
-    color: '#737DF9',
+  acceptBtnText: {
     fontFamily: 'gilroy',
     fontSize: 16,
-    fontWeight: '500',
+    color: '#FFF',
+  },
+  dismissBtn: {
+    height: 40,
+    width: 80,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dismissBtnText: {
+    fontFamily: 'gilroy',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#292D45',
   },
 });

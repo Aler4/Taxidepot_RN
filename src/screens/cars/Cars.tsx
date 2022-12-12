@@ -3,18 +3,15 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  carsSelector,
   carStatusSelector,
   carLoadSelector,
 } from '../../redux/selectors';
-import {deleteCar, requestCars} from '../../redux/actions';
-import {LoadView, CarCard, AddCarModal, ModalBtn} from '../../components';
+import {deleteCar} from '../../redux/actions';
+import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {TCar} from '../../redux/types';
 
 type TProps = {
@@ -23,10 +20,9 @@ type TProps = {
 
 export const Cars: React.FC<TProps> = ({route}) => {
   let data = route.params;
+  console.log('cars mount')
   const dispatch = useDispatch();
-  let [id, setId] = useState<number>(0);
   const [items, setItems] = useState(data.items);
-  const carsIsLoad = useSelector(carLoadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
@@ -59,9 +55,9 @@ export const Cars: React.FC<TProps> = ({route}) => {
       return setId(data.id);
     }
     setItems(data.items);
-  }, [data.items, data, id]);
+  }, []);
 
-  if (carsIsLoad) {
+  if (items.length === 0) {
     return <LoadView />;
   }
   return (
@@ -74,10 +70,11 @@ export const Cars: React.FC<TProps> = ({route}) => {
           <CarCard car={item} status_list={listItems} delCard={deleteCard} />
         )}
       />
-      <ModalBtn
+      <OpenModalBtn
         title={'Додати авто'}
         hendler={() => setModalState(!modalState)}
       />
+
       <AddCarModal
         statuses={listItems}
         visible={modalState}

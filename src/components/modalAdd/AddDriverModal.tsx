@@ -1,13 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Text, View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Text,
+  View,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import {ModalInput} from './ModalInput';
 import {StatusDropDown, TLabel} from '../StatusDropDown';
-import {DateInput} from '../DateInput';
-import {TDate} from '../../helpers/formatDate';
+import {DateInput} from './DateInput';
+import {TDate} from '../../helpers';
 import {useDispatch} from 'react-redux';
 import {addDriver} from '../../redux/depotReducer/action';
 import {TDriver} from '../../redux/types';
 import {Field, Formik} from 'formik';
+import * as yup from 'yup';
+import {ModalBtn} from './ModalBtn';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -15,22 +24,12 @@ type TModalProps = {
   changeVisible: (value: boolean) => void;
 };
 
-type TData = string | number | {value: string; code: string} | TDate;
-
 export const AddDriverModal: React.FC<TModalProps> = ({
   statuses,
   visible,
   changeVisible,
 }) => {
-  let initDriver: TDriver = {
-    first_name: '',
-    last_name: '',
-    date_birth: 0,
-    status: {title: 'Заблокирован', code: ''},
-  };
-
   const dispath = useDispatch();
-  const [driver, setDriver] = useState<TDriver>(initDriver);
 
   const [isVisible, setIsVisible] = useState(visible);
 
@@ -38,57 +37,72 @@ export const AddDriverModal: React.FC<TModalProps> = ({
     setIsVisible(visible);
   }, [visible]);
 
-  const getValue = useCallback(
-    (key: string, value: TData) => {
-      setDriver({...driver, [key]: value});
-    },
-    [driver, setDriver],
-  );
-
-  const addHandler = value => {
+  const addHandler = (value: TDriver) => {
     dispath(addDriver(value));
     changeVisible(!visible);
   };
 
-  return (
-    <Modal visible={isVisible} style={styles.container}>
-      <Formik
-        initialValues={{
-          first_name: '',
-          last_name: '',
-          date_birth: 0,
-          status: {title: 'Активный', code: 'active'},
-        }}
-        onSubmit={(values: TDriver) => addHandler(values)}>
-        {formik => (
-          <>
-            <Field component={ModalInput} name="first_name" title={"Ім'я"} />
-            <Field component={ModalInput} name="last_name" title={'Прізвище'} />
-            <Field
-              component={DateInput}
-              formik={formik}
-              title={'Дата народженя'}
-            />
+  const driverValidationSchema = yup.object().shape({
+    first_name: yup.string().required("Ім'я обов'язкове"),
+    last_name: yup
+      .string()
+      // .min(20, ({min, value}) => `${min - value.length} characters to go`)
+      .required("Прізвище обов'язкове"),
+    date_birth: yup.date().required('Оберіть дату'),
+  });
 
-            <Field
-              component={StatusDropDown}
-              formik={formik}
-              init_value={'Активный'}
-              labels={statuses}
-              title={'Статус'}
-              name="status"
-            />
-            <View style={styles.btnsContainer}>
-              <TouchableOpacity onPress={() => changeVisible(!visible)}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={formik.handleSubmit}>
-                <Text>Accepted</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-      </Formik>
+  return (
+    <Modal visible={isVisible}>
+      <SafeAreaView style={styles.container}>
+        <Formik
+          initialValues={{
+            first_name: '',
+            last_name: '',
+            date_birth: 0,
+            status: {title: 'Активный', code: 'active'},
+          }}
+          validationSchema={driverValidationSchema}
+          onSubmit={(values: TDriver) => console.log(values)}>
+          {formik => (
+            <>
+              <Field component={ModalInput} name="first_name" title={"Ім'я"} />
+              <Field
+                component={ModalInput}
+                name="last_name"
+                title={'Прізвище'}
+              />
+              <Field
+                component={DateInput}
+                formik={formik}
+                name={'date_birth'}
+                title={'Дата народженя'}
+              />
+
+              <Field
+                component={StatusDropDown}
+                formik={formik}
+                init_value={'Активный'}
+                labels={statuses}
+                title={'Статус'}
+                name="status"
+              />
+              <View style={styles.btnsContainer}>
+                <ModalBtn
+                  role={'dismiss'}
+                  title={'Назад'}
+                  handler={() => changeVisible(!visible)}
+                />
+                <ModalBtn
+                  role={'add'}
+                  title={'Додати'}
+                  valid={formik.isValid}
+                  handler={formik.handleSubmit}
+                />
+              </View>
+            </>
+          )}
+        </Formik>
+      </SafeAreaView>
     </Modal>
   );
 };
@@ -96,9 +110,8 @@ export const AddDriverModal: React.FC<TModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 50,
+    paddingTop: 30,
+    paddingBottom: 30,
   },
   status: {
     paddingLeft: 120,

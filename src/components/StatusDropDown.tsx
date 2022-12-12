@@ -14,6 +14,7 @@ type TStatusProps = {
   updateDate?: (data: {title: string; code: string}) => void;
   updateCard?: (data: {title: string; code: string}) => void;
   formik?: any;
+  card?: boolean;
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
@@ -21,7 +22,8 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
   const [selectedValue, setSelectedValue] = useState(props.init_value);
   console.log(selectedValue);
   const [items, setItems] = useState(props.labels);
-  const [title, setTitle] = useState(props.title.toUpperCase());
+  const [title, setTitle] = useState(props.title);
+
 
   const sendValue = (val: string) => {
     setSelectedValue(val);
@@ -53,52 +55,67 @@ export const StatusDropDown: React.FC<TStatusProps> = props => {
   }, [items, props.init_value]);
 
   return (
-    <View style={styles.row}>
-      <Text style={styles.title}>{title}</Text>
-      <Picker
-        dropdownIconColor={'#FFFFFF'}
-        style={styles.input}
-        prompt={'Status'}
-        mode={'dialog'}
-        selectedValue={selectedValue}
-        onValueChange={item => sendValue(item)}>
-        {pickers}
-      </Picker>
+    <View style={props.card ? styles.cardStyle : styles.modalStyle}>
+      <Text style={props.card ? styles.cardTitle : styles.modalTitle}>{title}</Text>
+      <View style={props.card ? null : styles.inputContainer}>
+        <Picker
+          dropdownIconColor={props.card ? '#FFFFFF' : '#8E91A0'}
+          style={props.card ? styles.cardInput : styles.modalInput}
+          prompt={'Status'}
+          mode={'dialog'}
+          selectedValue={selectedValue}
+          onValueChange={item => sendValue(item)}>
+          {pickers}
+        </Picker>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  input: {
+  cardInput: {
     fontFamily: 'gilroy',
     fontSize: 16,
     fontWeight: '500',
-    borderWidth: 0,
     width: 200,
     lineHeight: 1,
     textAlignVertical: 'top',
   },
-  list: {
-    display: 'flex',
-    height: 20,
-    borderBottomWidth: 0,
-    width: 200,
+  modalInput: {
+    fontFamily: 'gilroy',
+    fontSize: 16,
+    fontWeight: '500',
+    width: '100%',
+    lineHeight: 1,
+    textAlignVertical: 'center',
   },
-  row: {
+  cardStyle: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: '#EEEEEE',
     paddingHorizontal: 15,
   },
-  listContainer: {
-    width: 200,
-    borderWidth: 0,
+  modalStyle: {
+    paddingHorizontal: 50,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
   },
-  title: {
+  inputContainer: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#C5C6CE',
+  },
+  cardTitle: {
     fontFamily: 'gilroy',
     paddingRight: 10,
     color: '#292D45',
     fontSize: 14,
-    // opacity: 0.9,
+    opacity: 0.9,
+    textTransform: 'uppercase',
+  },
+  modalTitle: {
+    fontFamily: 'gilroy',
+    color: '#292D45',
+    paddingBottom: 5,
   },
 });

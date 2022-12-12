@@ -1,15 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  driversSelector,
   driverStatusSelector,
   driversLoadSelector,
 } from '../../redux/selectors';
@@ -20,16 +12,27 @@ import {
   requestDrivers,
   updateDriver,
 } from '../../redux/depotReducer/action';
-import {AddDriverModal, DriverCard, LoadView, ModalBtn} from '../../components';
+import {
+  AddDriverModal,
+  DriverCard,
+  LoadView,
+  OpenModalBtn,
+} from '../../components';
 
-export const CarOwner: React.FC<TDriver[]> = () => {
+type TProps = {
+  route: {params: {id?: number; items: TDriver[]}};
+};
+
+export const CarOwner: React.FC<TProps> = ({route}) => {
+  let params = route.params;
+  let [index, setIndex] = useState<number>(0);
   const driversIsLoad = useSelector(driversLoadSelector);
-  const drivers = useSelector(driversSelector);
   const statuses = useSelector(driverStatusSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
   }));
+
   const dispatch = useDispatch();
   const [modalState, setModalState] = useState<boolean>(false);
   const showModal = useCallback((value: boolean) => {
@@ -58,9 +61,20 @@ export const CarOwner: React.FC<TDriver[]> = () => {
     [dispatch],
   );
   useEffect(() => {
-    dispatch(requestDrivers());
-    dispatch(requestCars());
-  }, [dispatch]);
+    console.log(params.id)
+    if (params && params.id) {
+      return setIndex(params.id);
+    }
+  }, [params.id]);
+
+  const cards = useMemo(() => {
+    let driver =
+      index !== 0
+        ? params.items.filter(el => el.id === index)
+        : params.items;
+    console.log(driver)
+    return driver;
+  }, [params,index]);
 
   if (driversIsLoad) {
     return <LoadView />;
@@ -70,7 +84,7 @@ export const CarOwner: React.FC<TDriver[]> = () => {
       <FlatList
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={drivers}
+        data={cards}
         renderItem={({item}) => (
           <DriverCard
             driver={item}
@@ -80,10 +94,11 @@ export const CarOwner: React.FC<TDriver[]> = () => {
           />
         )}
       />
-      <ModalBtn
+      <OpenModalBtn
         title={'Додати водія'}
         hendler={() => setModalState(!modalState)}
       />
+
       <AddDriverModal
         statuses={listItems}
         visible={modalState}

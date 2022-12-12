@@ -72,18 +72,26 @@ export const DriverCard: React.FC<IDriverProps> = ({
           editable={true}
           updateHandler={updateCardData.bind(null, 'date_birth')}
         />
-        <StatusDropDown
-          init_value={driver.status.title}
-          labels={status_list}
-          title={'Статус: '}
-          updateCard={updateCardData.bind(null, 'status')}
-        />
+        <View>
+          <StatusDropDown
+            init_value={driver.status.title}
+            labels={status_list}
+            title={'Статус: '}
+            card={true}
+            updateCard={updateCardData.bind(null, 'status')}
+          />
+        </View>
 
         <View style={styles.actionContainer}>
           <DeleteBtn handler={deleteHandler} />
           <LinkBtn
             title={'Авто'}
-            route={() => nav.navigate('Cars', {screen: 'Personal', params: {id: driver.id} })}
+            route={() =>
+              nav.navigate('Cars', {
+                screen: 'Personal',
+                params: {id: driver.id},
+              })
+            }
           />
         </View>
       </View>

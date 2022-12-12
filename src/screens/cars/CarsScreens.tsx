@@ -5,24 +5,27 @@ import {Cars} from './Cars';
 import {useDispatch, useSelector} from 'react-redux';
 import {carsSelector} from '../../redux/selectors';
 import {requestCars} from '../../redux/actions';
+import { LoadView } from "../../components";
 const Stack = createNativeStackNavigator();
 
 export const CarsScreens: React.FC = () => {
   const dispatch = useDispatch();
   let cars = useSelector(carsSelector);
-  const [cards, setCards] = useState(cars);
   useEffect(() => {
     dispatch(requestCars());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    setCards(cars);
+    console.log(cars);
   }, [cars]);
+  if (cars.length === 0) {
+    return <LoadView />;
+  }
   return (
     <Stack.Navigator initialRouteName={'AllCars'}>
       <Stack.Screen
         name={'AllCars'}
-        initialParams={{items: cards}}
+        initialParams={{items: cars}}
         component={Cars}
         options={{
           headerShown: false,
@@ -31,7 +34,7 @@ export const CarsScreens: React.FC = () => {
       <Stack.Screen
         name={'Personal'}
         component={PersonalCars}
-        initialParams={{items: cards}}
+        initialParams={{items: cars}}
         options={{
           headerShown: false,
         }}

@@ -1,31 +1,37 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   driversSelector,
   driverStatusSelector,
   driversLoadSelector,
 } from '../../redux/selectors';
-import {TDriver} from '../../redux/types';
+import { TCar, TDriver } from "../../redux/types";
 import {
   deleteDriver,
-  requestCars,
-  requestDrivers,
   updateDriver,
 } from '../../redux/depotReducer/action';
-import { AddDriverModal, DriverCard, LoadView, ModalBtn } from "../../components";
+import {
+  AddDriverModal,
+  DriverCard,
+  LoadView,
+  OpenModalBtn,
+} from '../../components';
 
-export const Drivers: React.FC<TDriver[]> = () => {
+
+
+type TProps = {
+  route: {params: {id?: number; items: TDriver[]}};
+};
+
+export const Drivers: React.FC<TProps> = ({route}) => {
+  console.log('Drivers mount')
+  console.log(route.params.items)
+  let params = route.params;
   const driversIsLoad = useSelector(driversLoadSelector);
-  const drivers = useSelector(driversSelector);
   const statuses = useSelector(driverStatusSelector);
+  const [items, setItems] = useState(params.items);
+  console.log(items);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
@@ -57,10 +63,6 @@ export const Drivers: React.FC<TDriver[]> = () => {
     },
     [dispatch],
   );
-  useEffect(() => {
-    dispatch(requestDrivers());
-    dispatch(requestCars());
-  }, [dispatch]);
 
   if (driversIsLoad) {
     return <LoadView />;
@@ -70,7 +72,7 @@ export const Drivers: React.FC<TDriver[]> = () => {
       <FlatList
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={drivers}
+        data={items}
         renderItem={({item}) => (
           <DriverCard
             driver={item}
@@ -80,7 +82,7 @@ export const Drivers: React.FC<TDriver[]> = () => {
           />
         )}
       />
-      <ModalBtn
+      <OpenModalBtn
         title={'Додати водія'}
         hendler={() => setModalState(!modalState)}
       />
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F7F7F7',
-
   },
   list: {
     justifyContent: 'center',

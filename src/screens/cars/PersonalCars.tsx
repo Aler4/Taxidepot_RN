@@ -3,18 +3,15 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  carsSelector,
   carStatusSelector,
   carLoadSelector,
 } from '../../redux/selectors';
-import {deleteCar, requestCars} from '../../redux/actions';
-import { LoadView, CarCard, AddCarModal, ModalBtn } from "../../components";
+import {deleteCar} from '../../redux/actions';
+import { LoadView, CarCard, AddCarModal, OpenModalBtn } from "../../components";
 import {TCar} from '../../redux/types';
 
 type TProps = {
@@ -60,7 +57,8 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
   }, [data.items, data, id]);
 
   const cards = useMemo(() => {
-    let car = id !== 0 ? data.items.filter(el => el.driver_id === id) : data.items;
+    let car =
+      id !== 0 ? data.items.filter(el => el.driver_id === id) : data.items;
     return car;
   }, [data.items, id]);
 
@@ -78,7 +76,7 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
         )}
       />
 
-      <ModalBtn
+      <OpenModalBtn
         title={'Додати авто'}
         hendler={() => setModalState(!modalState)}
       />
