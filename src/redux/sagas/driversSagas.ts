@@ -31,16 +31,18 @@ function* getDrivers() {
 }
 function* addDriver(arg: TAddAction) {
   try {
-    yield addToApi('driver', 'post', arg.body).then(res => console.log(res));
-    yield getDrivers();
+    yield call(() => addToApi('driver', 'post', arg.body));
+    yield put({type: REQUEST_DRIVERS});
   } catch (e) {
     console.log(e);
   }
 }
 function* deleteDriver(arg: TAddAction) {
   try {
-    yield deleteFromApi('driver', arg.id);
-    yield getDrivers();
+    let index = arg.drivers?.findIndex(el => el.id === arg.id);
+    (arg.drivers as TDriver[]).splice(index as number, 1);
+    // put(uploadDrivers(arg.drivers as TDriver[]));
+    yield call(() => deleteFromApi('driver', arg.id));
   } catch (e) {
     console.log(e);
   }
@@ -48,7 +50,6 @@ function* deleteDriver(arg: TAddAction) {
 
 function* updateDriverCard(arg: TAddAction) {
   try {
-    console.log(arg.body);
     yield call(() => addToApi('driver', 'put', arg.body, arg.id));
   } catch (e) {
     console.log(e);

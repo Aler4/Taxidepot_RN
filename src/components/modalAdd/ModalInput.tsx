@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View } from "react-native";
 
 type TInputProps = {
   title: string;
@@ -17,6 +17,7 @@ export const ModalInput: React.FC<TInputProps> = props => {
   } = props;
 
   const hasError = errors[name] && touched[name];
+
 
   return (
     <View style={styles.container}>
@@ -38,10 +39,8 @@ export const ModalInput: React.FC<TInputProps> = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 50,
     marginBottom: 15,
-    height: 'auto',
   },
   textInput: {
     borderWidth: 1,

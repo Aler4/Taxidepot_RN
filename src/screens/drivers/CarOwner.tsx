@@ -8,8 +8,6 @@ import {
 import {TDriver} from '../../redux/types';
 import {
   deleteDriver,
-  requestCars,
-  requestDrivers,
   updateDriver,
 } from '../../redux/depotReducer/action';
 import {
@@ -47,7 +45,8 @@ export const CarOwner: React.FC<TProps> = ({route}) => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteDriver(id)),
+        onPress: () => dispatch(deleteDriver(params.items, id)),
+
         style: 'destructive',
       },
     ]);

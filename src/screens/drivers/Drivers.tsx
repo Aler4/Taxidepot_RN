@@ -2,21 +2,17 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  driversSelector,
   driverStatusSelector,
   driversLoadSelector,
 } from '../../redux/selectors';
-import { TCar, TDriver } from "../../redux/types";
-import {
-  deleteDriver,
-  updateDriver,
-} from '../../redux/depotReducer/action';
+import { TDriver } from "../../redux/types";
 import {
   AddDriverModal,
   DriverCard,
   LoadView,
   OpenModalBtn,
 } from '../../components';
+import { deleteDriver, updateDriver } from "../../redux/actions";
 
 
 
@@ -25,13 +21,10 @@ type TProps = {
 };
 
 export const Drivers: React.FC<TProps> = ({route}) => {
-  console.log('Drivers mount')
-  console.log(route.params.items)
   let params = route.params;
   const driversIsLoad = useSelector(driversLoadSelector);
   const statuses = useSelector(driverStatusSelector);
   const [items, setItems] = useState(params.items);
-  console.log(items);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
@@ -42,6 +35,7 @@ export const Drivers: React.FC<TProps> = ({route}) => {
     setModalState(value);
   }, []);
 
+
   const deleteCard = useCallback((id: number) => {
     return Alert.alert('Delete', 'Do you want delete this car?', [
       {
@@ -50,7 +44,7 @@ export const Drivers: React.FC<TProps> = ({route}) => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteDriver(id)),
+        onPress: () => dispatch(deleteDriver(items, id)),
         style: 'destructive',
       },
     ]);

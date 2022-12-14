@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Drivers} from './Drivers';
 import {CarOwner} from './CarOwner';
 import {useDispatch, useSelector} from 'react-redux';
-import {driversSelector } from "../../redux/selectors";
+import { driversLoadSelector, driversSelector } from "../../redux/selectors";
 import {requestDrivers } from "../../redux/actions";
 import { LoadView } from "../../components";
 const Stack = createNativeStackNavigator();
@@ -11,14 +11,13 @@ const Stack = createNativeStackNavigator();
 export const DriversScreens: React.FC = () => {
   const dispatch = useDispatch();
   let drivers = useSelector(driversSelector);
-  const [cards, setCards] = useState(drivers);
-
+  let load = useSelector(driversLoadSelector);
 
   useEffect(() => {
     dispatch(requestDrivers());
-  }, []);
+  }, [dispatch]);
 
-  if (drivers.length === 0) {
+  if (drivers.length === 0 || load) {
     return <LoadView />;
   }
   return (

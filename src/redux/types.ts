@@ -25,9 +25,9 @@ export type TCar = {
   driver?: string;
   model: string;
   mark: string;
-  year: number;
+  year: number | string;
   number: string;
-  driver_id: number;
+  driver_id: number | string;
   status: {
     title: string;
     code: string;
@@ -45,13 +45,7 @@ export type TAddAction = {
   drivers?: TDriver[];
   type: string;
 };
-// export interface IState {
-//   isLoad: boolean;
-//   cars: TCar[] | [];
-//   drivers: TDriver[] | [];
-//   driver_statuses: TStatus[] | [];
-//   car_statuses: TStatus[] | [];
-// }
+
 export interface ICarState {
   carsIsLoad: boolean;
   cars: TCar[] | [];

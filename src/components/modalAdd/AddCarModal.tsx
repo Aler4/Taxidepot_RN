@@ -1,11 +1,19 @@
-import React, { useEffect, useState} from 'react';
-import {View, Modal, StyleSheet, SafeAreaView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Modal,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {StatusDropDown, ModalInput, TLabel, ModalBtn} from '../';
 import {useDispatch} from 'react-redux';
 import {addCar} from '../../redux/depotReducer/action';
 import {TCar} from '../../redux/types';
 import {Formik, Field} from 'formik';
-import { requestCars } from "../../redux/actions";
+import {requestCars} from '../../redux/actions';
+import * as yup from 'yup';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -32,61 +40,93 @@ export const AddCarModal: React.FC<TModalProps> = ({
     changeVisible(!visible);
   };
 
+  const carValidation = yup.object().shape({
+    model: yup.string().required("Обов'язкове поле"),
+    mark: yup.string().required("Обов'язкове поле"),
+    number: yup
+      .string()
+      .required("Обов'язкове поле")
+      .min(8, 'мінімальна довжина 8 символів'),
+    year: yup.string().required("Обов'язкове поле"),
+    driver_id: yup.string().required("Обов'язкове поле"),
+  });
+
   return (
-    <Modal visible={isVisible} >
-      <SafeAreaView style={styles.container}>
-        <Formik
-          initialValues={{
-            model: '',
-            mark: '',
-            year: 2007,
-            number: '',
-            driver_id: 0,
-            status: {
-              title: '',
-              code: '',
-            },
-          }}
-          onSubmit={values => addHandler(values)}>
-          {formik => (
-            <>
-              <Field component={ModalInput} name="mark" title={'Марка'} />
-              <Field component={ModalInput} name="model" title={'Модель'} />
-              <Field
-                component={ModalInput}
-                name="year"
-                title={'Рік'}
-                keyboardType="numeric"
-              />
-              <Field component={ModalInput} title={'Номер авто'} name="number" />
+    <Modal visible={isVisible}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+        <SafeAreaView style={styles.container}>
+          <Formik
+            initialValues={{
+              model: '',
+              mark: '',
+              year: '',
+              number: '',
+              driver_id: '',
+              status: {
+                title: 'Стандарт',
+                code: 'standard',
+              },
+            }}
+            validationSchema={carValidation}
+            onSubmit={(values: TCar) => addHandler(values)}>
+            {formik => (
+              <>
+                <Field component={ModalInput} name="mark" title={'Марка'} />
+                <Field component={ModalInput} name="model" title={'Модель'} />
+                <Field
+                  component={ModalInput}
+                  name="year"
+                  title={'Рік'}
+                  keyboardType="numeric"
+                />
+                <Field
+                  component={ModalInput}
+                  title={'Номер авто'}
+                  name="number"
+                />
 
-              <Field component={ModalInput} title={'Ід водія'} name="driver_id" />
+                <Field
+                  component={ModalInput}
+                  title={'Ід водія'}
+                  name="driver_id"
+                />
 
-              <Field
-                component={StatusDropDown}
-                formik={formik}
-                init_value={'Стандарт'}
-                labels={statuses}
-                title={'Статус'}
-                name="status"
-              />
-              <View style={styles.btnsContainer}>
-                <ModalBtn  role={'dismiss'} title={'Назад'} handler={() => changeVisible(!visible)} />
-                <ModalBtn valid={formik.isValid} role={'add'} title={'Додати'} handler={formik.handleSubmit} />
-
-              </View>
-            </>
-          )}
-        </Formik>
-      </SafeAreaView>
+                <Field
+                  component={StatusDropDown}
+                  formik={formik}
+                  init_value={'Стандарт'}
+                  labels={statuses}
+                  title={'Статус'}
+                  name="status"
+                />
+                <View style={styles.btnsContainer}>
+                  <ModalBtn
+                    role={'dismiss'}
+                    title={'Назад'}
+                    handler={() => changeVisible(!visible)}
+                  />
+                  <ModalBtn
+                    valid={formik.isValid}
+                    role={'add'}
+                    title={'Додати'}
+                    handler={formik.handleSubmit}
+                  />
+                </View>
+              </>
+            )}
+          </Formik>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 30,
+    // flex: 1,
+    paddingTop: 10,
     paddingBottom: 30,
   },
   status: {

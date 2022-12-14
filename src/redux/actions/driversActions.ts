@@ -28,6 +28,6 @@ export const updateDriver = (body: TDriver, id: number) => ({
   type: UPDATE_DRIVER,
 });
 // export const updateCar = (data: TCar[] | []) => ({data, type: UPDATE_CARS});
-export const deleteDriver = (id: number) => ({id, type: DELETE_DRIVER});
+export const deleteDriver = (drivers: TDriver[] ,id: number) => ({drivers ,id, type: DELETE_DRIVER});
 export const addDriver = (body: TDriver) => ({body, type: ADD_DRIVER});
 export const requestDrivers = () => ({type: REQUEST_DRIVERS});

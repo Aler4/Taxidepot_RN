@@ -1,22 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Text,
   View,
   Modal,
   StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
 import {ModalInput} from './ModalInput';
 import {StatusDropDown, TLabel} from '../StatusDropDown';
 import {DateInput} from './DateInput';
-import {TDate} from '../../helpers';
 import {useDispatch} from 'react-redux';
-import {addDriver} from '../../redux/depotReducer/action';
 import {TDriver} from '../../redux/types';
 import {Field, Formik} from 'formik';
 import * as yup from 'yup';
 import {ModalBtn} from './ModalBtn';
+import { addDriver, requestDrivers } from "../../redux/actions";
 
 type TModalProps = {
   statuses: TLabel[];
@@ -39,6 +36,7 @@ export const AddDriverModal: React.FC<TModalProps> = ({
 
   const addHandler = (value: TDriver) => {
     dispath(addDriver(value));
+    requestDrivers();
     changeVisible(!visible);
   };
 
@@ -46,9 +44,8 @@ export const AddDriverModal: React.FC<TModalProps> = ({
     first_name: yup.string().required("Ім'я обов'язкове"),
     last_name: yup
       .string()
-      // .min(20, ({min, value}) => `${min - value.length} characters to go`)
       .required("Прізвище обов'язкове"),
-    date_birth: yup.date().required('Оберіть дату'),
+    // date_birth: yup.date().required('Оберіть дату'),
   });
 
   return (
@@ -62,7 +59,7 @@ export const AddDriverModal: React.FC<TModalProps> = ({
             status: {title: 'Активный', code: 'active'},
           }}
           validationSchema={driverValidationSchema}
-          onSubmit={(values: TDriver) => console.log(values)}>
+          onSubmit={(values: TDriver) => addHandler(values)}>
           {formik => (
             <>
               <Field component={ModalInput} name="first_name" title={"Ім'я"} />
@@ -81,7 +78,6 @@ export const AddDriverModal: React.FC<TModalProps> = ({
               <Field
                 component={StatusDropDown}
                 formik={formik}
-                init_value={'Активный'}
                 labels={statuses}
                 title={'Статус'}
                 name="status"
