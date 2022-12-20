@@ -36,7 +36,8 @@ export const AddDriverModal: React.FC<TModalProps> = ({
 
   const addHandler = (value: TDriver) => {
     dispath(addDriver(value));
-    requestDrivers();
+    dispath(requestDrivers());
+
     changeVisible(!visible);
   };
 

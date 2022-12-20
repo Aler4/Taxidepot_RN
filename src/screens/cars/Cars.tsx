@@ -1,16 +1,8 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  carStatusSelector,
-  carLoadSelector,
-} from '../../redux/selectors';
-import {deleteCar} from '../../redux/actions';
+import { carLoadSelector, carStatusSelector } from "../../redux/selectors";
+import {deleteCar, requestCars} from '../../redux/actions';
 import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {TCar} from '../../redux/types';
 
@@ -20,15 +12,20 @@ type TProps = {
 
 export const Cars: React.FC<TProps> = ({route}) => {
   let data = route.params;
-  console.log('cars mount')
   const dispatch = useDispatch();
   const [items, setItems] = useState(data.items);
   let statuses = useSelector(carStatusSelector);
+  let load = useSelector(carLoadSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
   }));
   const [modalState, setModalState] = useState<boolean>(false);
+
+  const delHandler = (id: number) => {
+    dispatch(deleteCar(items, id));
+    dispatch(requestCars());
+  };
 
   const deleteCard = useCallback((id: number) => {
     return Alert.alert('Delete', 'Do you want delete this car?', [
@@ -38,7 +35,7 @@ export const Cars: React.FC<TProps> = ({route}) => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteCar(id)),
+        onPress: () => delHandler(id),
       },
     ]);
   }, []);
@@ -51,13 +48,10 @@ export const Cars: React.FC<TProps> = ({route}) => {
   );
 
   useEffect(() => {
-    if (data && data.id) {
-      return setId(data.id);
-    }
     setItems(data.items);
   }, []);
 
-  if (items.length === 0) {
+  if (load) {
     return <LoadView />;
   }
   return (

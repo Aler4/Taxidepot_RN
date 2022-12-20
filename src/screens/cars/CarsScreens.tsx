@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {PersonalCars} from './PersonalCars';
 import {Cars} from './Cars';
 import {useDispatch, useSelector} from 'react-redux';
-import {carsSelector} from '../../redux/selectors';
+import { carLoadSelector, carsSelector } from "../../redux/selectors";
 import {requestCars} from '../../redux/actions';
 import { LoadView } from "../../components";
 const Stack = createNativeStackNavigator();
@@ -11,14 +11,12 @@ const Stack = createNativeStackNavigator();
 export const CarsScreens: React.FC = () => {
   const dispatch = useDispatch();
   let cars = useSelector(carsSelector);
+  let load = useSelector(carLoadSelector);
   useEffect(() => {
     dispatch(requestCars());
   }, []);
 
-  useEffect(() => {
-    console.log(cars);
-  }, [cars]);
-  if (cars.length === 0) {
+  if (cars.length === 0 || load) {
     return <LoadView />;
   }
   return (

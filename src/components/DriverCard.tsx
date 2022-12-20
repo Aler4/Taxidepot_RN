@@ -15,6 +15,7 @@ interface IDriverProps {
   delCard: (id: number) => void;
   updateCard: (data: TDriver, id: number) => void;
 }
+
 export type TValue = string | number | {title: string; code: string} | null;
 
 export const DriverCard: React.FC<IDriverProps> = ({

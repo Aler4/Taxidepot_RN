@@ -36,7 +36,9 @@ function* addCar(arg: TAddAction) {
     if (arg.body) {
       (arg.body as TCar).year = +(arg.body as TCar).year;
     }
-    yield call(() => addToApi('car', 'post', arg.body).then(res => console.log(res)));
+    yield call(() =>
+      addToApi('car', 'post', arg.body).then(res => console.log(res)),
+    );
     yield getCars();
   } catch (e) {
     console.log(e);
@@ -45,8 +47,9 @@ function* addCar(arg: TAddAction) {
 
 function* deleteCar(arg: TAddAction) {
   try {
+    let index = arg.cars?.findIndex(el => el.id === arg.id);
+    (arg.cars as TCar[]).splice(index as number, 1);
     yield call(() => deleteFromApi('car', arg.id));
-    yield getCars();
   } catch (e) {
     console.log(e);
   }

@@ -1,17 +1,9 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  carStatusSelector,
-  carLoadSelector,
-} from '../../redux/selectors';
-import {deleteCar} from '../../redux/actions';
-import { LoadView, CarCard, AddCarModal, OpenModalBtn } from "../../components";
+import {carStatusSelector, carLoadSelector} from '../../redux/selectors';
+import {deleteCar, requestCars} from '../../redux/actions';
+import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {TCar} from '../../redux/types';
 
 type TProps = {
@@ -30,6 +22,18 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
   }));
   const [modalState, setModalState] = useState<boolean>(false);
 
+  const showModal = useCallback(
+    (value: boolean) => {
+      setModalState(value);
+    },
+    [setModalState],
+  );
+
+  const delHandler = (id: number) => {
+    dispatch(deleteCar(id));
+    dispatch(requestCars());
+  };
+
   const deleteCard = useCallback((id: number) => {
     return Alert.alert('Delete', 'Do you want delete this car?', [
       {
@@ -38,23 +42,10 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteCar(id)),
+        onPress: () => delHandler(id),
       },
     ]);
   }, []);
-
-  const showModal = useCallback(
-    (value: boolean) => {
-      setModalState(value);
-    },
-    [setModalState],
-  );
-
-  useEffect(() => {
-    if (data && data.id) {
-      return setId(data.id);
-    }
-  }, [data.items, data, id]);
 
   const cards = useMemo(() => {
     let car =
@@ -62,6 +53,11 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
     return car;
   }, [data.items, id]);
 
+  useEffect(() => {
+    if (data && data.id) {
+      return setId(data.id);
+    }
+  }, [data.items, data, id]);
   if (carsIsLoad) {
     return <LoadView />;
   }

@@ -32,15 +32,14 @@ function* getDrivers() {
 function* addDriver(arg: TAddAction) {
   try {
     yield call(() => addToApi('driver', 'post', arg.body));
-    yield put({type: REQUEST_DRIVERS});
   } catch (e) {
     console.log(e);
   }
 }
 function* deleteDriver(arg: TAddAction) {
   try {
-    let index = arg.drivers?.findIndex(el => el.id === arg.id);
-    (arg.drivers as TDriver[]).splice(index as number, 1);
+    // let index = arg.drivers?.findIndex(el => el.id === arg.id);
+    // (arg.drivers as TDriver[]).splice(index as number, 1);
     // put(uploadDrivers(arg.drivers as TDriver[]));
     yield call(() => deleteFromApi('driver', arg.id));
   } catch (e) {
