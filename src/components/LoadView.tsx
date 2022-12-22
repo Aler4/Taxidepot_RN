@@ -1,10 +1,15 @@
-import React from 'react';
+import {FC} from 'react';
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
 
-export const LoadView: React.FC = () => {
+interface IProps {
+  size?: 'large' | 'small' | number | undefined;
+}
+
+export const LoadView: FC<IProps> = props => {
+  let indicatorSize = props.size || 'large';
   return (
     <View style={[styles.container, styles.horizontal]}>
-      <ActivityIndicator size={'large'} color={'#14e0e0'} />
+      <ActivityIndicator size={indicatorSize} color={'#14e0e0'} />
     </View>
   );
 };

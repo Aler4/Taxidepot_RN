@@ -1,28 +1,19 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  driverStatusSelector,
-  driversLoadSelector,
-} from '../../redux/selectors';
+import {driverStatusSelector, driversLoadSelector} from '../../redux/selectors';
 import {TDriver} from '../../redux/types';
-import {
-  deleteDriver,
-  updateDriver,
-} from '../../redux/depotReducer/action';
-import {
-  AddDriverModal,
-  DriverCard,
-  LoadView,
-  OpenModalBtn,
-} from '../../components';
+import {deleteDriver, updateDriver} from '../../redux/depotReducer/action';
+import {AddDriverModal, DriverCard, OpenModalBtn} from '../../components';
+import {useRoute} from '@react-navigation/native';
+import {OwnerCarsProps} from './DriversScreens';
 
 type TProps = {
   route: {params: {id?: number; items: TDriver[]}};
 };
 
-export const CarOwner: React.FC<TProps> = ({route}) => {
-  let params = route.params;
+export const CarOwner: FC = () => {
+  let {params} = useRoute<OwnerCarsProps>();
   let [index, setIndex] = useState<number>(0);
   const driversIsLoad = useSelector(driversLoadSelector);
   const statuses = useSelector(driverStatusSelector);
@@ -60,7 +51,6 @@ export const CarOwner: React.FC<TProps> = ({route}) => {
     [dispatch],
   );
   useEffect(() => {
-    console.log(params.id)
     if (params && params.id) {
       return setIndex(params.id);
     }
@@ -68,16 +58,11 @@ export const CarOwner: React.FC<TProps> = ({route}) => {
 
   const cards = useMemo(() => {
     let driver =
-      index !== 0
-        ? params.items.filter(el => el.id === index)
-        : params.items;
-    console.log(driver)
+      index !== 0 ? params.items.filter(el => el.id === index) : params.items;
+    console.log(driver);
     return driver;
-  }, [params,index]);
+  }, [params, index]);
 
-  if (driversIsLoad) {
-    return <LoadView />;
-  }
   return (
     <SafeAreaView style={styles.container}>
       <FlatList

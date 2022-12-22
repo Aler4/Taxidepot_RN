@@ -1,23 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import { FC, useEffect, useState } from "react";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Drivers} from './Drivers';
 import {CarOwner} from './CarOwner';
 import {useDispatch, useSelector} from 'react-redux';
 import { driversLoadSelector, driversSelector } from "../../redux/selectors";
-import {requestDrivers } from "../../redux/actions";
-import { LoadView } from "../../components";
+import {requestDrivers} from '../../redux/actions';
+import {LoadView} from '../../components';
+import {requestDriverStatuses} from '../../redux/actions/driversActions';
+import {TDriver} from '../../redux/types';
+import {RouteProp} from '@react-navigation/native';
+
 const Stack = createNativeStackNavigator();
 
-export const DriversScreens: React.FC = () => {
+export const DriversScreens: FC = () => {
   const dispatch = useDispatch();
   let drivers = useSelector(driversSelector);
-  let load = useSelector(driversLoadSelector);
+  const load = useSelector(driversLoadSelector);
+  const [cards, setCard] = useState(drivers);
 
   useEffect(() => {
     dispatch(requestDrivers());
-  }, [dispatch]);
+    dispatch(requestDriverStatuses());
+    setCard(drivers)
+  }, []);
 
-  if (drivers.length === 0 || load) {
+  useEffect(() => {
+    if (drivers.length !== 0) {
+      setCard(drivers);
+    }
+  },[drivers])
+
+  if (cards.length === 0) {
     return <LoadView />;
   }
   return (
@@ -25,7 +38,7 @@ export const DriversScreens: React.FC = () => {
       <Stack.Screen
         name={'AllDrivers'}
         component={Drivers}
-        initialParams={{items: drivers}}
+        initialParams={{items: cards}}
         options={{
           headerShown: false,
           headerStyle: {
@@ -36,7 +49,7 @@ export const DriversScreens: React.FC = () => {
       <Stack.Screen
         name={'Owner'}
         component={CarOwner}
-        initialParams={{items: drivers}}
+        initialParams={{items: cards}}
         options={{
           headerShown: false,
           headerStyle: {
@@ -47,3 +60,10 @@ export const DriversScreens: React.FC = () => {
     </Stack.Navigator>
   );
 };
+export type CarsStackParams = {
+  Owner: {items: TDriver[]; id?: number};
+  AllDrivers: {items: TDriver[]};
+};
+
+export type AllDriversProps = RouteProp<CarsStackParams, 'AllDrivers'>;
+export type OwnerCarsProps = RouteProp<CarsStackParams, 'Owner'>;

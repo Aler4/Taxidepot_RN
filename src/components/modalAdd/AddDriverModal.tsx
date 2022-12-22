@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Modal,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Modal, StyleSheet, SafeAreaView, Text} from 'react-native';
 import {ModalInput} from './ModalInput';
 import {StatusDropDown, TLabel} from '../StatusDropDown';
 import {DateInput} from './DateInput';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {TDriver} from '../../redux/types';
 import {Field, Formik} from 'formik';
 import * as yup from 'yup';
 import {ModalBtn} from './ModalBtn';
-import { addDriver, requestDrivers } from "../../redux/actions";
+import {addDriver, requestDrivers} from '../../redux/actions';
+import {LoadView} from '../LoadView';
+import {driversLoadSelector} from '../../redux/selectors';
 
 type TModalProps = {
   statuses: TLabel[];
@@ -27,8 +24,8 @@ export const AddDriverModal: React.FC<TModalProps> = ({
   changeVisible,
 }) => {
   const dispath = useDispatch();
-
   const [isVisible, setIsVisible] = useState(visible);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     setIsVisible(visible);
@@ -36,16 +33,22 @@ export const AddDriverModal: React.FC<TModalProps> = ({
 
   const addHandler = (value: TDriver) => {
     dispath(addDriver(value));
+    setLoad(true)
     dispath(requestDrivers());
+    setTimeout(() => {
+      setLoad(false);
+      changeVisible(!visible);
 
-    changeVisible(!visible);
+    }, 1);
   };
+
+  useEffect(() => {
+    console.log(load);
+  },[load])
 
   const driverValidationSchema = yup.object().shape({
     first_name: yup.string().required("Ім'я обов'язкове"),
-    last_name: yup
-      .string()
-      .required("Прізвище обов'язкове"),
+    last_name: yup.string().required("Прізвище обов'язкове"),
     // date_birth: yup.date().required('Оберіть дату'),
   });
 
@@ -83,6 +86,7 @@ export const AddDriverModal: React.FC<TModalProps> = ({
                 title={'Статус'}
                 name="status"
               />
+
               <View style={styles.btnsContainer}>
                 <ModalBtn
                   role={'dismiss'}
@@ -100,6 +104,11 @@ export const AddDriverModal: React.FC<TModalProps> = ({
           )}
         </Formik>
       </SafeAreaView>
+      {load ? (
+        <View style={styles.loadView}>
+          <LoadView size={35} />
+        </View>
+      ) : null}
     </Modal>
   );
 };
@@ -109,11 +118,20 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     paddingBottom: 30,
+    position: 'relative',
   },
   status: {
     paddingLeft: 120,
   },
-
+  loadView: {
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    zIndex: 3,
+    backgroundColor: 'grey',
+    opacity: 0.5,
+  },
   btnsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

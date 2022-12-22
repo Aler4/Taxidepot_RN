@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {StatusDropDown, ModalInput, TLabel, ModalBtn} from '../';
+import { StatusDropDown, ModalInput, TLabel, ModalBtn, LoadView } from "../";
 import {useDispatch} from 'react-redux';
 import {addCar} from '../../redux/depotReducer/action';
 import {TCar} from '../../redux/types';
@@ -29,15 +29,22 @@ export const AddCarModal: React.FC<TModalProps> = ({
   const dispath = useDispatch();
 
   const [isVisible, setIsVisible] = useState(visible);
+  const [load, setLoad] = useState(false);
+
 
   useEffect(() => {
     setIsVisible(visible);
   }, [visible]);
 
   const addHandler = (val: TCar) => {
-    dispath(addCar(val));
+    setLoad(true);
+    // dispath(addCar(val));
     dispath(requestCars());
-    changeVisible(!visible);
+    setTimeout(() => {
+      setLoad(false);
+      changeVisible(!visible);
+
+    }, 1);
   };
 
   const carValidation = yup.object().shape({
@@ -118,6 +125,11 @@ export const AddCarModal: React.FC<TModalProps> = ({
             )}
           </Formik>
         </SafeAreaView>
+        {load ? (
+          <View style={styles.loadView}>
+            <LoadView size={35} />
+          </View>
+        ) : null}
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -133,7 +145,15 @@ const styles = StyleSheet.create({
     paddingLeft: 120,
     borderWidth: 0,
   },
-
+  loadView: {
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    zIndex: 3,
+    backgroundColor: 'grey',
+    opacity: 0.5,
+  },
   btnsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

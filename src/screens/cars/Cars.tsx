@@ -1,21 +1,19 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {FC,useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import { carLoadSelector, carStatusSelector } from "../../redux/selectors";
 import {deleteCar, requestCars} from '../../redux/actions';
 import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {TCar} from '../../redux/types';
+import { AllCarsProps } from "./CarsScreens";
+import { useRoute } from "@react-navigation/native";
 
-type TProps = {
-  route: {params: {id?: number; items: TCar[]}};
-};
 
-export const Cars: React.FC<TProps> = ({route}) => {
-  let data = route.params;
+export const Cars: FC = props => {
+  let {params} = useRoute<AllCarsProps>();
   const dispatch = useDispatch();
-  const [items, setItems] = useState(data.items);
+  const [items, setItems] = useState(params.items);
   let statuses = useSelector(carStatusSelector);
-  let load = useSelector(carLoadSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
@@ -48,12 +46,9 @@ export const Cars: React.FC<TProps> = ({route}) => {
   );
 
   useEffect(() => {
-    setItems(data.items);
+    setItems(params.items);
   }, []);
 
-  if (load) {
-    return <LoadView />;
-  }
   return (
     <SafeAreaView style={styles.container}>
       <FlatList

@@ -18,9 +18,7 @@ type TStatusProps = {
 };
 
 export const StatusDropDown: React.FC<TStatusProps> = props => {
-  console.log(props.init_value);
   const [selectedValue, setSelectedValue] = useState(props.init_value);
-  console.log(selectedValue);
   const [items, setItems] = useState(props.labels);
   const [title, setTitle] = useState(props.title);
 

@@ -7,16 +7,19 @@ import { carLoadSelector, carsSelector } from "../../redux/selectors";
 import {requestCars} from '../../redux/actions';
 import { LoadView } from "../../components";
 const Stack = createNativeStackNavigator();
+import {RouteProp} from "@react-navigation/native";
+import { TCar } from "../../redux/types";
+
+
 
 export const CarsScreens: React.FC = () => {
   const dispatch = useDispatch();
   let cars = useSelector(carsSelector);
-  let load = useSelector(carLoadSelector);
   useEffect(() => {
     dispatch(requestCars());
   }, []);
 
-  if (cars.length === 0 || load) {
+  if (cars.length === 0) {
     return <LoadView />;
   }
   return (
@@ -40,3 +43,11 @@ export const CarsScreens: React.FC = () => {
     </Stack.Navigator>
   );
 };
+
+export type CarsStackParams = {
+  Personal: {items: TCar[]; id?: number};
+  AllCars: {items: TCar[]};
+};
+
+export type AllCarsProps = RouteProp<CarsStackParams, 'AllCars'>;
+export type PersonalCarsProps = RouteProp<CarsStackParams, 'Personal'>;

@@ -1,30 +1,18 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  driverStatusSelector,
-  driversLoadSelector,
-} from '../../redux/selectors';
-import { TDriver } from "../../redux/types";
-import {
-  AddDriverModal,
-  DriverCard,
-  LoadView,
-  OpenModalBtn,
-} from '../../components';
-import { deleteDriver, updateDriver } from "../../redux/actions";
+import { driversLoadSelector, driverStatusSelector } from "../../redux/selectors";
+import {TDriver} from '../../redux/types';
+import { AddDriverModal, DriverCard, LoadView, OpenModalBtn } from "../../components";
+import { deleteCar, deleteDriver, requestCars, requestDrivers, updateDriver } from "../../redux/actions";
+import {useRoute} from '@react-navigation/native';
+import {AllDriversProps} from './DriversScreens';
 
-
-
-type TProps = {
-  route: {params: {id?: number; items: TDriver[]}};
-};
-
-export const Drivers: React.FC<TProps> = ({route}) => {
-  let params = route.params;
-  const driversIsLoad = useSelector(driversLoadSelector);
+export const Drivers: FC = () => {
+  let {params} = useRoute<AllDriversProps>();
   const statuses = useSelector(driverStatusSelector);
   const [items, setItems] = useState(params.items);
+  const load = useSelector(driversLoadSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
     code: el.code,
@@ -35,6 +23,11 @@ export const Drivers: React.FC<TProps> = ({route}) => {
     setModalState(value);
   }, []);
 
+  const delHandler = (id: number) => {
+    dispatch(deleteDriver(id));
+    dispatch(requestDrivers());
+    dispatch(requestCars());
+  };
 
   const deleteCard = useCallback((id: number) => {
     return Alert.alert('Delete', 'Do you want delete this car?', [
@@ -44,7 +37,7 @@ export const Drivers: React.FC<TProps> = ({route}) => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteDriver(items, id)),
+        onPress: () => delHandler(id),
         style: 'destructive',
       },
     ]);
@@ -57,9 +50,8 @@ export const Drivers: React.FC<TProps> = ({route}) => {
     },
     [dispatch],
   );
-
-  if (driversIsLoad) {
-    return <LoadView />;
+  if (load) {
+    return (<LoadView />)
   }
   return (
     <SafeAreaView style={styles.container}>

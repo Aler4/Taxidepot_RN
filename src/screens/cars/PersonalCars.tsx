@@ -1,20 +1,16 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {carStatusSelector, carLoadSelector} from '../../redux/selectors';
+import {carStatusSelector} from '../../redux/selectors';
 import {deleteCar, requestCars} from '../../redux/actions';
-import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
-import {TCar} from '../../redux/types';
+import {CarCard, AddCarModal, OpenModalBtn} from '../../components';
+import {PersonalCarsProps} from './CarsScreens';
+import {useRoute} from '@react-navigation/native';
 
-type TProps = {
-  route: {params: {id?: number; items: TCar[]}};
-};
-
-export const PersonalCars: React.FC<TProps> = ({route}) => {
+export const PersonalCars: FC = () => {
   const dispatch = useDispatch();
-  let data = route.params;
+  const {params} = useRoute<PersonalCarsProps>();
   let [id, setId] = useState<number>(0);
-  const carsIsLoad = useSelector(carLoadSelector);
   let statuses = useSelector(carStatusSelector);
   let listItems = statuses.map(el => ({
     value: el.title,
@@ -49,18 +45,16 @@ export const PersonalCars: React.FC<TProps> = ({route}) => {
 
   const cards = useMemo(() => {
     let car =
-      id !== 0 ? data.items.filter(el => el.driver_id === id) : data.items;
+      id !== 0 ? params.items.filter(el => el.driver_id === id) : params.items;
     return car;
-  }, [data.items, id]);
+  }, [params.items, id]);
 
   useEffect(() => {
-    if (data && data.id) {
-      return setId(data.id);
+    if (params && params.id) {
+      return setId(params.id);
     }
-  }, [data.items, data, id]);
-  if (carsIsLoad) {
-    return <LoadView />;
-  }
+  }, [params.items, params, id]);
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
