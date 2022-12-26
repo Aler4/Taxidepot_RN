@@ -6,7 +6,8 @@ import {CardRow} from './CardRow';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {TLabel} from './StatusDropDown';
-import {useNavigation} from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {ScreenStackParams } from '../AppNavigator/TabNavigator';
 
 interface CarProps {
   car: TCar;
@@ -15,7 +16,7 @@ interface CarProps {
 }
 
 export const CarCard: React.FC<CarProps> = ({car, delCard}) => {
-  const nav = useNavigation();
+  const nav = useNavigation<NavigationProp<ScreenStackParams>>();
   const [cardData, setCardData] = useState(car);
   useEffect(() => {
     setCardData(car);

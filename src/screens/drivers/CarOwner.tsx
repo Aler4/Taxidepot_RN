@@ -1,27 +1,18 @@
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {driverStatusSelector, driversLoadSelector} from '../../redux/selectors';
+import {driversSelector} from '../../redux/selectors';
 import {TDriver} from '../../redux/types';
 import {deleteDriver, updateDriver} from '../../redux/depotReducer/action';
 import {AddDriverModal, DriverCard, OpenModalBtn} from '../../components';
 import {useRoute} from '@react-navigation/native';
 import {OwnerCarsProps} from './DriversScreens';
 
-type TProps = {
-  route: {params: {id?: number; items: TDriver[]}};
-};
-
 export const CarOwner: FC = () => {
-  let {params} = useRoute<OwnerCarsProps>();
-  let [index, setIndex] = useState<number>(0);
-  const driversIsLoad = useSelector(driversLoadSelector);
-  const statuses = useSelector(driverStatusSelector);
-  let listItems = statuses.map(el => ({
-    value: el.title,
-    code: el.code,
-  }));
-
+  const {params} = useRoute<OwnerCarsProps>();
+  const statuses = params.statuses;
+  const [index, setIndex] = useState<number>(0);
+  const drivers = useSelector(driversSelector);
   const dispatch = useDispatch();
   const [modalState, setModalState] = useState<boolean>(false);
   const showModal = useCallback((value: boolean) => {
@@ -36,7 +27,7 @@ export const CarOwner: FC = () => {
       },
       {
         text: 'DELETE',
-        onPress: () => dispatch(deleteDriver(params.items, id)),
+        onPress: () => dispatch(deleteDriver(id)),
 
         style: 'destructive',
       },
@@ -57,11 +48,9 @@ export const CarOwner: FC = () => {
   }, [params.id]);
 
   const cards = useMemo(() => {
-    let driver =
-      index !== 0 ? params.items.filter(el => el.id === index) : params.items;
-    console.log(driver);
+    let driver = index !== 0 ? drivers.filter(el => el.id === index) : drivers;
     return driver;
-  }, [params, index]);
+  }, [drivers, index]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,7 +61,7 @@ export const CarOwner: FC = () => {
         renderItem={({item}) => (
           <DriverCard
             driver={item}
-            status_list={listItems}
+            status_list={statuses}
             delCard={deleteCard}
             updateCard={updateCard}
           />
@@ -84,7 +73,7 @@ export const CarOwner: FC = () => {
       />
 
       <AddDriverModal
-        statuses={listItems}
+        statuses={statuses}
         visible={modalState}
         changeVisible={showModal}
       />

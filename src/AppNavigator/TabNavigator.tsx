@@ -2,6 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {CarsScreens, DriversScreens} from '../screens';
+import { TCar } from "../redux/types";
+import { RouteProp } from "@react-navigation/native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -36,4 +38,8 @@ export const AppTabs: React.FC = () => {
       />
     </Tabs.Navigator>
   );
+};
+export type ScreenStackParams = {
+  Cars: {screen: 'AllCars' | 'Personal'; params: {id?: number | string}};
+  Drivers: {screen: 'Owner' | 'AllDrivers'; params: {id?: number | string}};
 };

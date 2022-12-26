@@ -1,22 +1,19 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import { driversLoadSelector, driverStatusSelector } from "../../redux/selectors";
+import { driversLoadSelector, driversSelector, driverStatusSelector } from "../../redux/selectors";
 import {TDriver} from '../../redux/types';
 import { AddDriverModal, DriverCard, LoadView, OpenModalBtn } from "../../components";
-import { deleteCar, deleteDriver, requestCars, requestDrivers, updateDriver } from "../../redux/actions";
+import {deleteDriver, requestCars, requestDrivers, updateDriver } from "../../redux/actions";
 import {useRoute} from '@react-navigation/native';
 import {AllDriversProps} from './DriversScreens';
 
 export const Drivers: FC = () => {
   let {params} = useRoute<AllDriversProps>();
-  const statuses = useSelector(driverStatusSelector);
-  const [items, setItems] = useState(params.items);
+  const statuses = params.statuses;
+  const drivers = useSelector(driversSelector);
   const load = useSelector(driversLoadSelector);
-  let listItems = statuses.map(el => ({
-    value: el.title,
-    code: el.code,
-  }));
+
   const dispatch = useDispatch();
   const [modalState, setModalState] = useState<boolean>(false);
   const showModal = useCallback((value: boolean) => {
@@ -58,11 +55,11 @@ export const Drivers: FC = () => {
       <FlatList
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={items}
+        data={drivers}
         renderItem={({item}) => (
           <DriverCard
             driver={item}
-            status_list={listItems}
+            status_list={statuses}
             delCard={deleteCard}
             updateCard={updateCard}
           />
@@ -73,7 +70,7 @@ export const Drivers: FC = () => {
         hendler={() => setModalState(!modalState)}
       />
       <AddDriverModal
-        statuses={listItems}
+        statuses={statuses}
         visible={modalState}
         changeVisible={showModal}
       />

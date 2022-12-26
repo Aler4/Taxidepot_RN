@@ -7,7 +7,9 @@ import {formatDate, TDate, makeCompare} from '../helpers';
 import {DeleteBtn} from './DeleteBtn';
 import {LinkBtn} from './LinkBtn';
 import {StatusDropDown, TLabel} from './StatusDropDown';
-import {useNavigation} from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {ScreenStackParams } from '../AppNavigator/TabNavigator';
+
 
 interface IDriverProps {
   driver: TDriver;
@@ -25,7 +27,7 @@ export const DriverCard: React.FC<IDriverProps> = ({
   updateCard,
 }) => {
   const [cardData, setCardData] = useState<TDriver>({...driver});
-  const nav = useNavigation();
+  const nav = useNavigation<NavigationProp<ScreenStackParams>>();
 
   const deleteHandler = useCallback(() => {
     delCard(driver.id as number);

@@ -1,36 +1,31 @@
-import { FC, useEffect, useState } from "react";
+import {FC, useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Drivers} from './Drivers';
 import {CarOwner} from './CarOwner';
 import {useDispatch, useSelector} from 'react-redux';
-import { driversLoadSelector, driversSelector } from "../../redux/selectors";
+import {
+  driversSelector,
+  driverStatusSelector,
+} from '../../redux/selectors';
 import {requestDrivers} from '../../redux/actions';
-import {LoadView} from '../../components';
+import { LoadView, TLabel } from "../../components";
 import {requestDriverStatuses} from '../../redux/actions/driversActions';
-import {TDriver} from '../../redux/types';
+import {TStatus } from "../../redux/types";
 import {RouteProp} from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 export const DriversScreens: FC = () => {
   const dispatch = useDispatch();
-  let drivers = useSelector(driversSelector);
-  const load = useSelector(driversLoadSelector);
-  const [cards, setCard] = useState(drivers);
+  const statuses = useSelector(driverStatusSelector);
+  const drivers = useSelector(driversSelector);
 
   useEffect(() => {
     dispatch(requestDrivers());
     dispatch(requestDriverStatuses());
-    setCard(drivers)
   }, []);
 
-  useEffect(() => {
-    if (drivers.length !== 0) {
-      setCard(drivers);
-    }
-  },[drivers])
-
-  if (cards.length === 0) {
+  if (drivers.length === 0) {
     return <LoadView />;
   }
   return (
@@ -38,7 +33,7 @@ export const DriversScreens: FC = () => {
       <Stack.Screen
         name={'AllDrivers'}
         component={Drivers}
-        initialParams={{items: cards}}
+        initialParams={{statuses: statuses}}
         options={{
           headerShown: false,
           headerStyle: {
@@ -49,7 +44,7 @@ export const DriversScreens: FC = () => {
       <Stack.Screen
         name={'Owner'}
         component={CarOwner}
-        initialParams={{items: cards}}
+        initialParams={{statuses: statuses}}
         options={{
           headerShown: false,
           headerStyle: {
@@ -61,8 +56,8 @@ export const DriversScreens: FC = () => {
   );
 };
 export type CarsStackParams = {
-  Owner: {items: TDriver[]; id?: number};
-  AllDrivers: {items: TDriver[]};
+  Owner: {statuses: TLabel[]; id?: number};
+  AllDrivers: {statuses: TLabel[]};
 };
 
 export type AllDriversProps = RouteProp<CarsStackParams, 'AllDrivers'>;

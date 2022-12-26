@@ -1,13 +1,12 @@
-import {FC,useCallback, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import { carLoadSelector, carStatusSelector } from "../../redux/selectors";
+import {carLoadSelector, carStatusSelector} from '../../redux/selectors';
 import {deleteCar, requestCars} from '../../redux/actions';
 import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {TCar} from '../../redux/types';
-import { AllCarsProps } from "./CarsScreens";
-import { useRoute } from "@react-navigation/native";
-
+import {AllCarsProps} from './CarsScreens';
+import {useRoute} from '@react-navigation/native';
 
 export const Cars: FC = props => {
   let {params} = useRoute<AllCarsProps>();
@@ -21,7 +20,7 @@ export const Cars: FC = props => {
   const [modalState, setModalState] = useState<boolean>(false);
 
   const delHandler = (id: number) => {
-    dispatch(deleteCar(items, id));
+    dispatch(deleteCar(id));
     dispatch(requestCars());
   };
 
