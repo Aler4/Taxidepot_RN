@@ -10,7 +10,6 @@ import {
 import {requestDrivers} from '../../redux/actions';
 import { LoadView, TLabel } from "../../components";
 import {requestDriverStatuses} from '../../redux/actions/driversActions';
-import {TStatus } from "../../redux/types";
 import {RouteProp} from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();

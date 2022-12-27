@@ -47,8 +47,6 @@ function* addCar(arg: TAddAction) {
 
 function* deleteCar(arg: TAddAction) {
   try {
-    let index = arg.cars?.findIndex(el => el.id === arg.id);
-    (arg.cars as TCar[]).splice(index as number, 1);
     yield call(() => deleteFromApi('car', arg.id));
   } catch (e) {
     console.log(e);

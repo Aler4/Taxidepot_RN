@@ -48,9 +48,6 @@ function* addDriver(arg: TAddAction) {
 }
 function* deleteDriver(arg: TAddAction) {
   try {
-    // let index = arg.drivers?.findIndex(el => el.id === arg.id);
-    // (arg.drivers as TDriver[]).splice(index as number, 1);
-    // put(uploadDrivers(arg.drivers as TDriver[]));
     yield call(() => deleteFromApi('driver', arg.id));
   } catch (e) {
     console.log(e);

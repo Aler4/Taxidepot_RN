@@ -1,12 +1,13 @@
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import { SafeAreaView, FlatList, StyleSheet, Alert, RefreshControl } from "react-native";
 import {useDispatch, useSelector} from 'react-redux';
-import {driversSelector} from '../../redux/selectors';
+import { driversLoadSelector, driversSelector } from "../../redux/selectors";
 import {TDriver} from '../../redux/types';
 import {deleteDriver, updateDriver} from '../../redux/depotReducer/action';
 import {AddDriverModal, DriverCard, OpenModalBtn} from '../../components';
 import {useRoute} from '@react-navigation/native';
 import {OwnerCarsProps} from './DriversScreens';
+import { requestDrivers } from "../../redux/actions";
 
 export const CarOwner: FC = () => {
   const {params} = useRoute<OwnerCarsProps>();
@@ -14,6 +15,7 @@ export const CarOwner: FC = () => {
   const [index, setIndex] = useState<number>(0);
   const drivers = useSelector(driversSelector);
   const dispatch = useDispatch();
+  const load = useSelector(driversLoadSelector);
   const [modalState, setModalState] = useState<boolean>(false);
   const showModal = useCallback((value: boolean) => {
     setModalState(value);
@@ -55,6 +57,13 @@ export const CarOwner: FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            colors={['#14e0e0', '#9deaf9']}
+            refreshing={load}
+            onRefresh={() => dispatch(requestDrivers())}
+
+          />}
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
         data={cards}

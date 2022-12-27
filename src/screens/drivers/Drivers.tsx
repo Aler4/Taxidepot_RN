@@ -1,5 +1,5 @@
 import {FC, useCallback, useEffect, useState} from 'react';
-import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import { SafeAreaView, FlatList, StyleSheet, Alert, RefreshControl } from "react-native";
 import {useDispatch, useSelector} from 'react-redux';
 import { driversLoadSelector, driversSelector, driverStatusSelector } from "../../redux/selectors";
 import {TDriver} from '../../redux/types';
@@ -47,12 +47,16 @@ export const Drivers: FC = () => {
     },
     [dispatch],
   );
-  if (load) {
-    return (<LoadView />)
-  }
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            colors={['#14e0e0', '#9deaf9']}
+            refreshing={load}
+            onRefresh={() => dispatch(requestDrivers())}
+
+        />}
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
         data={drivers}

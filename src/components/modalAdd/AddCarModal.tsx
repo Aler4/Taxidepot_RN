@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { StatusDropDown, ModalInput, TLabel, ModalBtn, LoadView } from "../";
+import {StatusDropDown, ModalInput, TLabel, ModalBtn, LoadView} from '../';
 import {useDispatch} from 'react-redux';
 import {addCar} from '../../redux/depotReducer/action';
 import {TCar} from '../../redux/types';
@@ -31,20 +31,18 @@ export const AddCarModal: React.FC<TModalProps> = ({
   const [isVisible, setIsVisible] = useState(visible);
   const [load, setLoad] = useState(false);
 
-
   useEffect(() => {
     setIsVisible(visible);
   }, [visible]);
 
   const addHandler = (val: TCar) => {
     setLoad(true);
-    // dispath(addCar(val));
+    dispath(addCar(val));
     dispath(requestCars());
     setTimeout(() => {
       setLoad(false);
       changeVisible(!visible);
-
-    }, 1);
+    }, 2);
   };
 
   const carValidation = yup.object().shape({

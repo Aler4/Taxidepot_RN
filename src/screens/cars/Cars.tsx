@@ -1,23 +1,25 @@
-import {FC, useCallback, useEffect, useState} from 'react';
-import {SafeAreaView, FlatList, StyleSheet, Alert} from 'react-native';
+import {FC, useCallback, useState} from 'react';
+import {
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Alert,
+  RefreshControl,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {carLoadSelector, carStatusSelector} from '../../redux/selectors';
+import {carLoadSelector, carsSelector} from '../../redux/selectors';
 import {deleteCar, requestCars} from '../../redux/actions';
-import {LoadView, CarCard, AddCarModal, OpenModalBtn} from '../../components';
-import {TCar} from '../../redux/types';
+import {CarCard, AddCarModal, OpenModalBtn} from '../../components';
 import {AllCarsProps} from './CarsScreens';
 import {useRoute} from '@react-navigation/native';
 
-export const Cars: FC = props => {
-  let {params} = useRoute<AllCarsProps>();
+export const Cars: FC = () => {
+  const {params} = useRoute<AllCarsProps>();
   const dispatch = useDispatch();
-  const [items, setItems] = useState(params.items);
-  let statuses = useSelector(carStatusSelector);
-  let listItems = statuses.map(el => ({
-    value: el.title,
-    code: el.code,
-  }));
+  const cars = useSelector(carsSelector);
+  const statuses = params.statuses;
   const [modalState, setModalState] = useState<boolean>(false);
+  const load = useSelector(carLoadSelector);
 
   const delHandler = (id: number) => {
     dispatch(deleteCar(id));
@@ -44,18 +46,21 @@ export const Cars: FC = props => {
     [setModalState],
   );
 
-  useEffect(() => {
-    setItems(params.items);
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            colors={['#14e0e0', '#9deaf9']}
+            refreshing={load}
+            onRefresh={() => dispatch(requestCars())}
+          />
+        }
         contentContainerStyle={styles.list}
         keyExtractor={item => (item.id as number).toString()}
-        data={items}
+        data={cars}
         renderItem={({item}) => (
-          <CarCard car={item} status_list={listItems} delCard={deleteCard} />
+          <CarCard car={item} status_list={statuses} delCard={deleteCard} />
         )}
       />
       <OpenModalBtn
@@ -64,7 +69,7 @@ export const Cars: FC = props => {
       />
 
       <AddCarModal
-        statuses={listItems}
+        statuses={statuses}
         visible={modalState}
         changeVisible={showModal}
       />

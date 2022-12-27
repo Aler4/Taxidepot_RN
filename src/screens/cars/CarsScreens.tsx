@@ -3,9 +3,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {PersonalCars} from './PersonalCars';
 import {Cars} from './Cars';
 import {useDispatch, useSelector} from 'react-redux';
-import { carLoadSelector, carsSelector } from "../../redux/selectors";
+import { carLoadSelector, carsSelector, carStatusSelector } from "../../redux/selectors";
 import {requestCars} from '../../redux/actions';
-import { LoadView } from "../../components";
+import { LoadView, TLabel } from "../../components";
 const Stack = createNativeStackNavigator();
 import {RouteProp} from "@react-navigation/native";
 import { TCar } from "../../redux/types";
@@ -15,6 +15,7 @@ import { TCar } from "../../redux/types";
 export const CarsScreens: React.FC = () => {
   const dispatch = useDispatch();
   let cars = useSelector(carsSelector);
+  const statuses = useSelector(carStatusSelector);
   useEffect(() => {
     dispatch(requestCars());
   }, []);
@@ -26,7 +27,7 @@ export const CarsScreens: React.FC = () => {
     <Stack.Navigator initialRouteName={'AllCars'}>
       <Stack.Screen
         name={'AllCars'}
-        initialParams={{items: cars}}
+        initialParams={{statuses: statuses}}
         component={Cars}
         options={{
           headerShown: false,
@@ -35,7 +36,7 @@ export const CarsScreens: React.FC = () => {
       <Stack.Screen
         name={'Personal'}
         component={PersonalCars}
-        initialParams={{items: cars}}
+        initialParams={{statuses: statuses}}
         options={{
           headerShown: false,
         }}
@@ -45,8 +46,8 @@ export const CarsScreens: React.FC = () => {
 };
 
 export type CarsStackParams = {
-  Personal: {items: TCar[]; id?: number};
-  AllCars: {items: TCar[]};
+  Personal: {statuses: TLabel[]; id?: number};
+  AllCars: {statuses: TLabel[]};
 };
 
 export type AllCarsProps = RouteProp<CarsStackParams, 'AllCars'>;
